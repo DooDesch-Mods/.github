@@ -1,0 +1,99 @@
+name: Update mod catalog
+
+# Regenerates the "Mods" section of profile/README.md from the org's repositories, grouped by their
+# `game-<slug>` topic. Source of truth = each repo's description + topics, so the landing page never needs
+# manual edits: new mod = create a repo (description + a game-<slug> topic), new game = just use a new
+# game-<slug> topic. Optional pretty names/order live in profile/games.json.
+
+on:
+  schedule:
+    - cron: "17 6 * * *"        # daily
+  workflow_dispatch: {}
+  repository_dispatch:
+    types: [catalog-update]      # member repos can POST a dispatch to refresh on release
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-catalog
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build catalog into profile/README.md
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const org = context.repo.owner;
+            const path = 'profile/README.md';
+            const START = '<!-- MODS:START -->';
+            const END = '<!-- MODS:END -->';
+
+            let games = {};
+            try { games = JSON.parse(fs.readFileSync('profile/games.json', 'utf8')); } catch (e) {}
+
+            const repos = await github.paginate(github.rest.repos.listForOrg, { org, type: 'public', per_page: 100 });
+
+            const groups = {};
+            for (const r of repos) {
+              if (r.archived || r.fork || r.private) continue;
+              for (const t of (r.topics || [])) {
+                const m = /^game-(.+)$/.exec(t);
+                if (m) (groups[m[1]] ||= []).push(r);
+              }
+            }
+
+            const slugs = Object.keys(groups);
+            if (slugs.length === 0) {
+              core.warning('No repos with a game-* topic found - leaving the catalog unchanged.');
+              return;
+            }
+
+            const titleCase = s => s.split('-')
+              .map(w => w === 'i' ? 'I' : (w ? w[0].toUpperCase() + w.slice(1) : w))
+              .join(' ');
+            const nameOf = s => (games[s] && games[s].name) || titleCase(s);
+            const orderOf = s => (games[s] && typeof games[s].order === 'number') ? games[s].order : 999;
+
+            slugs.sort((a, b) => (orderOf(a) - orderOf(b)) || nameOf(a).localeCompare(nameOf(b)));
+
+            let md = '';
+            for (const slug of slugs) {
+              md += `### ${nameOf(slug)}\n\n`;
+              const list = groups[slug].sort((a, b) => a.name.localeCompare(b.name));
+              for (const r of list) {
+                const desc = (r.description || '').replace(/\s+/g, ' ').trim();
+                md += `- **[${r.name}](${r.html_url})**${desc ? ' - ' + desc : ''}\n`;
+              }
+              md += '\n';
+            }
+
+            const block = `${START}\n<!-- Auto-generated from org repos tagged \`game-*\`. Do not edit by hand. -->\n\n${md.trim()}\n${END}`;
+
+            let readme = fs.readFileSync(path, 'utf8');
+            const re = new RegExp(`${START}[\\s\\S]*?${END}`);
+            if (!re.test(readme)) {
+              core.setFailed('Markers MODS:START / MODS:END not found in profile/README.md');
+              return;
+            }
+            const updated = readme.replace(re, block);
+            if (updated !== readme) {
+              fs.writeFileSync(path, updated);
+              core.info('Catalog updated.');
+            } else {
+              core.info('Catalog already up to date.');
+            }
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add profile/README.md
+          git diff --staged --quiet || git commit -m "chore: auto-update mod catalog"
+          git push

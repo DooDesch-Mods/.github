@@ -1,0 +1,5 @@
+{
+  "_comment": "Optional pretty-names + ordering for the auto-generated mod catalog. Keyed by the game-<slug> topic suffix. A new game works WITHOUT editing this (it falls back to a title-cased name, sorted after the ordered ones) - only add an entry here if you want a custom display name or order.",
+  "schedule-i": { "name": "Schedule I", "order": 1 },
+  "mimesis": { "name": "Mimesis", "order": 2 }
+}
