@@ -1,10 +1,13 @@
 # DooDesch Mods 🎮
 
 Small, focused MelonLoader mods for a few games - mostly quality-of-life and performance stuff I wanted in
-my own runs, cleaned up and shared. Open source, free, and on Thunderstore, Nexus and GitHub Releases.
+my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstore and GitHub Releases.
 
 > 🛟 **Need help or found a bug?** Get support at [support.doodesch.de](https://support.doodesch.de).
 
+**👉 All my mods in one place on Nexus: [nexusmods.com/profile/DooDesch](https://www.nexusmods.com/profile/DooDesch/mods)**
+
+[![Nexus](https://img.shields.io/badge/Nexus-all%20my%20mods-da8e35)](https://www.nexusmods.com/profile/DooDesch/mods)
 ![Loader](https://img.shields.io/badge/loader-MelonLoader-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
