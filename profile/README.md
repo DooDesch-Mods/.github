@@ -23,6 +23,7 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 - **[ScheduleOne-InkorporatedExample](https://github.com/DooDesch-Mods/ScheduleOne-InkorporatedExample)** - Example + template for the Inkorporated tattoo framework (Schedule I): a no-code pack and a code mod using the API.
 - **[ScheduleOne-Litterally](https://github.com/DooDesch-Mods/ScheduleOne-Litterally)** - Trash performance for Schedule I - the map can hold 100k+ pieces of litter, lag-free.
 - **[ScheduleOne-LooseEnds](https://github.com/DooDesch-Mods/ScheduleOne-LooseEnds)** - Schedule I - NPCs who spot a body call the cops and an investigation kicks off.
+- **[ScheduleOne-SideHustle](https://github.com/DooDesch-Mods/ScheduleOne-SideHustle)** - A main-menu hub that lists installed gamemode mods and launches them without a savegame.
 - **[ScheduleOne-Siesta](https://github.com/DooDesch-Mods/ScheduleOne-Siesta)** - NPC performance LOD for Schedule I - hides and pauses distant, off-screen NPCs for more FPS and wakes them cleanly as you approach.
 - **[ScheduleOne-Snitch](https://github.com/DooDesch-Mods/ScheduleOne-Snitch)** - A performance profiler for Schedule I - cost + state of NPCs, trash, quests and your own mods, with a HUD and a live web dashboard.
 - **[ScheduleOne-SnitchExample](https://github.com/DooDesch-Mods/ScheduleOne-SnitchExample)** - Example + modder API (Snitch.cs shim) for the Snitch Schedule I performance profiler.
