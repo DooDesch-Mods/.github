@@ -19,6 +19,8 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 ### Schedule I
 
 - **[RVRepairVan](https://github.com/DooDesch-Mods/RVRepairVan)** - Repair your wrecked RV in Schedule I through a tracked questline, with referral haggling and a repair cinematic.
+- **[ScheduleOne-Hotline](https://github.com/DooDesch-Mods/ScheduleOne-Hotline)** - One overlay and one key for every mod's HUD - a framework + compatibility layer for Schedule I.
+- **[ScheduleOne-HotlineExample](https://github.com/DooDesch-Mods/ScheduleOne-HotlineExample)** - Modder example for Hotline - register a panel in the unified overlay (no-op when Hotline is absent).
 - **[ScheduleOne-Inkorporated](https://github.com/DooDesch-Mods/ScheduleOne-Inkorporated)** - Custom tattoo framework for Schedule I - mods add tattoos to the in-game tattoo shop via drop-in packs or a public API.
 - **[ScheduleOne-InkorporatedExample](https://github.com/DooDesch-Mods/ScheduleOne-InkorporatedExample)** - Example + template for the Inkorporated tattoo framework (Schedule I): a no-code pack and a code mod using the API.
 - **[ScheduleOne-Inkubator](https://github.com/DooDesch-Mods/ScheduleOne-Inkubator)** - In-game 3D tattoo editor for Schedule I: import PNGs, place them on the character, preview live, and export a ready-to-publish Inkorporated tattoo pack.
