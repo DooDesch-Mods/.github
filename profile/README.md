@@ -30,6 +30,7 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 - **[ScheduleOne-Siesta](https://github.com/DooDesch-Mods/ScheduleOne-Siesta)** - NPC performance LOD for Schedule I - hides and pauses distant, off-screen NPCs for more FPS and wakes them cleanly as you approach.
 - **[ScheduleOne-Snitch](https://github.com/DooDesch-Mods/ScheduleOne-Snitch)** - A performance profiler for Schedule I - cost + state of NPCs, trash, quests and your own mods, with a HUD and a live web dashboard.
 - **[ScheduleOne-SnitchExample](https://github.com/DooDesch-Mods/ScheduleOne-SnitchExample)** - Example + modder API (Snitch.cs shim) for the Snitch Schedule I performance profiler.
+- **[ScheduleOne-TightBeam](https://github.com/DooDesch-Mods/ScheduleOne-TightBeam)** - A believable, limited-range handheld flashlight for Schedule I with a cross-mod control API.
 
 ### Mimesis
 
