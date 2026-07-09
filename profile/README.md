@@ -26,6 +26,7 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 - **[ScheduleOne-Inkubator](https://github.com/DooDesch-Mods/ScheduleOne-Inkubator)** - In-game 3D tattoo editor for Schedule I: import PNGs, place them on the character, preview live, and export a ready-to-publish Inkorporated tattoo pack.
 - **[ScheduleOne-Litterally](https://github.com/DooDesch-Mods/ScheduleOne-Litterally)** - Trash performance for Schedule I - the map can hold 100k+ pieces of litter, lag-free.
 - **[ScheduleOne-LooseEnds](https://github.com/DooDesch-Mods/ScheduleOne-LooseEnds)** - Schedule I - NPCs who spot a body call the cops and an investigation kicks off.
+- **[ScheduleOne-PropHunt](https://github.com/DooDesch-Mods/ScheduleOne-PropHunt)** - Multiplayer prop hunt for Schedule I - hide as a prop or hunt them down. A Side Hustle gamemode built on S1API.
 - **[ScheduleOne-SideHustle](https://github.com/DooDesch-Mods/ScheduleOne-SideHustle)** - A main-menu hub that lists installed gamemode mods and launches them without a savegame.
 - **[ScheduleOne-Siesta](https://github.com/DooDesch-Mods/ScheduleOne-Siesta)** - NPC performance LOD for Schedule I - hides and pauses distant, off-screen NPCs for more FPS and wakes them cleanly as you approach.
 - **[ScheduleOne-Snitch](https://github.com/DooDesch-Mods/ScheduleOne-Snitch)** - A performance profiler for Schedule I - cost + state of NPCs, trash, quests and your own mods, with a HUD and a live web dashboard.
