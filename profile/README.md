@@ -19,6 +19,7 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 ### Schedule I
 
 - **[RVRepairVan](https://github.com/DooDesch-Mods/RVRepairVan)** - Repair your wrecked RV in Schedule I through a tracked questline, with referral haggling and a repair cinematic.
+- **[ScheduleOne-FullHouse](https://github.com/DooDesch-Mods/ScheduleOne-FullHouse)** - Bigger co-op lobbies for Schedule I - raise the 4-player cap (32 by default). MelonLoader mod.
 - **[ScheduleOne-Hotline](https://github.com/DooDesch-Mods/ScheduleOne-Hotline)** - One overlay and one key for every mod's HUD - a framework + compatibility layer for Schedule I.
 - **[ScheduleOne-HotlineExample](https://github.com/DooDesch-Mods/ScheduleOne-HotlineExample)** - Modder example for Hotline - register a panel in the unified overlay (no-op when Hotline is absent).
 - **[ScheduleOne-Inkorporated](https://github.com/DooDesch-Mods/ScheduleOne-Inkorporated)** - Custom tattoo framework for Schedule I - mods add tattoos to the in-game tattoo shop via drop-in packs or a public API.
@@ -31,6 +32,7 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 - **[ScheduleOne-Siesta](https://github.com/DooDesch-Mods/ScheduleOne-Siesta)** - NPC performance LOD for Schedule I - hides and pauses distant, off-screen NPCs for more FPS and wakes them cleanly as you approach.
 - **[ScheduleOne-Snitch](https://github.com/DooDesch-Mods/ScheduleOne-Snitch)** - A performance profiler for Schedule I - cost + state of NPCs, trash, quests and your own mods, with a HUD and a live web dashboard.
 - **[ScheduleOne-SnitchExample](https://github.com/DooDesch-Mods/ScheduleOne-SnitchExample)** - Example + modder API (Snitch.cs shim) for the Snitch Schedule I performance profiler.
+- **[ScheduleOne-Stash](https://github.com/DooDesch-Mods/ScheduleOne-Stash)** - Public shared source for DooDesch's Schedule I mods (starts with the FullHouse lobby-cap engine).
 - **[ScheduleOne-TightBeam](https://github.com/DooDesch-Mods/ScheduleOne-TightBeam)** - A believable, limited-range handheld flashlight for Schedule I with a cross-mod control API.
 
 ### Mimesis
