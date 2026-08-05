@@ -44,6 +44,10 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 - **[Mimesis-InventoryExpansion](https://github.com/DooDesch-Mods/Mimesis-InventoryExpansion)** - Mimesis - a bigger inventory.
 - **[Mimesis-MarkerMod](https://github.com/DooDesch-Mods/Mimesis-MarkerMod)** - Mimesis - in-world markers / pings.
 - **[Mimesis-TooManyPlayers](https://github.com/DooDesch-Mods/Mimesis-TooManyPlayers)** - Mimesis - raise the lobby player cap.
+
+### Schedule One
+
+- **[ScheduleOne-Hash](https://github.com/DooDesch-Mods/ScheduleOne-Hash)** - A terminal instead of the dev console: completion, arguments, output and history, on the in-game phone.
 <!-- MODS:END -->
 
 > This list builds itself from the repos (grouped by game), so it stays current - open any repo for
