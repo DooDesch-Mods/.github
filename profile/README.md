@@ -79,7 +79,7 @@ Not mods - the things around them.
 
 Easiest: use a Thunderstore mod manager ([r2modman](https://thunderstore.io/c/schedule-i/p/ebkr/r2modman/)
 or Gale) and install from there - it pulls in MelonLoader and the right API for you. Manual: install
-[MelonLoader](https://melonloader.co/), then drop the mod's `.dll` (plus its API dependency) into the game's
+[MelonLoader](https://melonwiki.xyz/), then drop the mod's `.dll` (plus its API dependency) into the game's
 `Mods/` folder. Each mod's README has the specifics and config options.
 
 ## Found a bug or need help?
@@ -89,7 +89,7 @@ Lemme know if anything breaks - I read everything, even if it takes me a bit (bu
 
 ## Built with
 
-[MelonLoader](https://melonloader.co/) and each game's community modding API (S1API for Schedule I,
+[MelonLoader](https://melonwiki.xyz/) and each game's community modding API (S1API for Schedule I,
 MimicAPI for Mimesis). Big thanks to those projects and the modding communities around them.
 
 ## License
