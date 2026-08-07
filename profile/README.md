@@ -11,6 +11,11 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 ![Loader](https://img.shields.io/badge/loader-MelonLoader-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
+## Just released
+
+<!-- RELEASES:START -->
+<!-- RELEASES:END -->
+
 ## Mods
 
 <!-- MODS:START -->
@@ -59,12 +64,12 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 - **[Palworld-Palvolve](https://github.com/DooDesch-Mods/Palworld-Palvolve)** - Conditional evolutions for Palworld: your Pals evolve when you choose, under conditions you set. UE4SS + PalSchema, web configurator, multiplayer-ready.
 <!-- MODS:END -->
 
-> This list builds itself from the repos (grouped by game), so it stays current - open any repo for
-> details, downloads and config.
+> Both lists build themselves from the repos, so they stay current. Open any repo for the full
+> description, downloads and config.
 
 ## Tools and sites
 
-Not mods - the things around them.
+Not mods. The things around them.
 
 <!-- TOOLS:START -->
 <!-- Auto-generated from the org's repo topics. Do not edit by hand. -->

@@ -1,15 +1,20 @@
 name: Update mod catalog
 
-# Regenerates the two generated blocks in profile/README.md from the org's repositories, so the landing page
-# never needs a manual edit. Source of truth = each repo's description + topics.
+# Regenerates the three generated blocks in profile/README.md from the org's repositories, so the landing
+# page never needs a manual edit. Source of truth = each repo's description, topics and releases.
 #
-#   game-<slug>     -> the "Mods" list, grouped and headed by game. New mod = create the repo with a
+#   game-<slug>     -> the "Mods" table, grouped and headed by game. New mod = create the repo with a
 #                      description and a game-<slug> topic. New game = just use a new slug.
-#   doodesch-tool   -> the "Tools and sites" list. One flat list, for the things that are not mods: a
-#                      knowledge base, a dashboard, a backend.
+#   for-modders     -> moves a repo into that game's collapsed "For modders" list: libraries, shared source,
+#                      example projects. Things a player never installs on purpose.
+#   doodesch-tool   -> the "Tools and sites" list, for what is not a mod at all.
 #
-# Optional pretty names and ordering for the game headings live in profile/games.json. A repo with NEITHER
-# topic is invisible here - that is the usual reason a new repo never shows up.
+# The newest releases across the catalogue fill a third block on their own - the one thing a returning
+# visitor actually wants and the one thing a static page cannot keep true.
+#
+# Optional pretty names and ordering for the game headings live in profile/games.json. A repo with none of
+# the topics above is invisible here, which is the usual reason a new repo never shows up, so the run
+# warns and names it.
 
 on:
   schedule:
@@ -39,6 +44,8 @@ jobs:
             const org = context.repo.owner;
             const path = 'profile/README.md';
             const TOOL_TOPIC = 'doodesch-tool';
+            const MODDER_TOPIC = 'for-modders';
+            const RECENT = 6;
 
             let games = {};
             try { games = JSON.parse(fs.readFileSync('profile/games.json', 'utf8')); } catch (e) {}
@@ -56,8 +63,6 @@ jobs:
               }
             }
 
-            // A repo carrying neither topic is silently absent from the page, which reads exactly like the
-            // workflow being broken - so say so in the run summary where somebody will actually find it.
             const untagged = live
               .filter(r => r.name !== '.github')
               .filter(r => !(r.topics || []).some(t => /^game-/.test(t) || t === TOOL_TOPIC))
@@ -71,24 +76,98 @@ jobs:
               .join(' ');
             const nameOf = s => (games[s] && games[s].name) || titleCase(s);
             const orderOf = s => (games[s] && typeof games[s].order === 'number') ? games[s].order : 999;
-
-            const line = r => {
-              const desc = (r.description || '').replace(/\s+/g, ' ').trim();
-              return `- **[${r.name}](${r.html_url})**${desc ? ' - ' + desc : ''}\n`;
-            };
             const byName = (a, b) => a.name.localeCompare(b.name);
+
+            // A table is only easier to scan than bullets if the second column stays one line wide, so the
+            // description is cut to a sentence where there is one and to a word boundary otherwise. The full
+            // text is one click away on the repo itself, which is where somebody who wants it is going next.
+            const LIMIT = 96;
+            const summarise = r => {
+              let d = (r.description || '').replace(/\s+/g, ' ').replace(/\|/g, '\\|').trim();
+              if (d.length <= LIMIT) return d;
+
+              const stop = d.slice(0, LIMIT + 1).lastIndexOf('. ');
+              if (stop > LIMIT * 0.5) return d.slice(0, stop + 1);
+
+              return d.slice(0, d.lastIndexOf(' ', LIMIT - 3)).replace(/[,;:-]$/, '') + '...';
+            };
+
+            const table = (list, strip) => {
+              // Sorted by the LABEL, not by the repo name. With the shared prefix dropped the two differ, and
+              // sorting by the hidden name puts RVRepairVan above Clipwise for a reason nobody can see.
+              const rows = list
+                .map(r => {
+                  const cut = r.name.indexOf('-');
+                  const label = (strip && cut > 0 && strip.has(r.name.slice(0, cut))) ? r.name.slice(cut + 1) : r.name;
+                  return { label, r };
+                })
+                .sort((a, b) => a.label.localeCompare(b.label));
+
+              let md = '| Mod | What it does |\n|---|---|\n';
+              for (const { label, r } of rows) md += `| **[${label}](${r.html_url})** | ${summarise(r)} |\n`;
+              return md;
+            };
+
+            // Inside a section headed "Schedule I", twenty rows starting with "ScheduleOne-" spend the widest
+            // column on the one word every row shares. The prefix is dropped when at least two repos in the
+            // group carry it, which leaves a one-off like RVRepairVan alone - and the short form is what the
+            // mod is called on Nexus and Thunderstore anyway. The link still points at the real repo.
+            const sharedPrefixes = list => {
+              const seen = {};
+              for (const r of list) {
+                const cut = r.name.indexOf('-');
+                if (cut > 0) seen[r.name.slice(0, cut)] = (seen[r.name.slice(0, cut)] || 0) + 1;
+              }
+              return new Set(Object.keys(seen).filter(p => seen[p] > 1));
+            };
 
             let modsMd = '';
             const slugs = Object.keys(groups)
               .sort((a, b) => (orderOf(a) - orderOf(b)) || nameOf(a).localeCompare(nameOf(b)));
+
             for (const slug of slugs) {
+              const all = groups[slug];
+              const strip = sharedPrefixes(all);
+              const forModders = all.filter(r => (r.topics || []).includes(MODDER_TOPIC));
+              const forPlayers = all.filter(r => !(r.topics || []).includes(MODDER_TOPIC));
+
               modsMd += `### ${nameOf(slug)}\n\n`;
-              for (const r of groups[slug].sort(byName)) modsMd += line(r);
+              modsMd += table(forPlayers.length ? forPlayers : all, strip);
+
+              // Libraries, shared source and example projects are noise to the person looking for something
+              // to install, and the only thing that matters to the person writing a mod. Folded, not dropped.
+              if (forPlayers.length && forModders.length) {
+                modsMd += `\n<details>\n<summary><b>For modders</b> - libraries, shared source and examples (${forModders.length})</summary>\n\n`;
+                modsMd += table(forModders, strip);
+                modsMd += `\n</details>\n`;
+              }
               modsMd += '\n';
             }
 
-            let toolsMd = '';
-            for (const r of tools.sort(byName)) toolsMd += line(r);
+            let toolsMd = '| Project | What it is |\n|---|---|\n';
+            for (const r of tools.sort(byName)) toolsMd += `| **[${r.name}](${r.html_url})** | ${summarise(r)} |\n`;
+            if (!tools.length) toolsMd = '';
+
+            // Newest releases, across everything in the catalogue. A repo with no release 404s and is skipped.
+            const catalogued = [...new Set(Object.values(groups).flat())];
+            const releases = [];
+            for (const r of catalogued) {
+              try {
+                const { data } = await github.rest.repos.getLatestRelease({ owner: org, repo: r.name });
+                if (data.draft || data.prerelease || !data.published_at) continue;
+                releases.push({ repo: r.name, url: data.html_url, tag: data.tag_name, at: data.published_at });
+              } catch (e) {
+                if (e.status !== 404) core.warning(`Could not read the latest release of ${r.name}: ${e.message}`);
+              }
+            }
+            releases.sort((a, b) => b.at.localeCompare(a.at));
+
+            const day = iso => new Date(iso).toISOString().slice(0, 10);
+            let releasesMd = '';
+            for (const rel of releases.slice(0, RECENT)) {
+              releasesMd += `| ${day(rel.at)} | **[${rel.repo}](https://github.com/${org}/${rel.repo})** | [${rel.tag}](${rel.url}) |\n`;
+            }
+            if (releasesMd) releasesMd = '| Date | Mod | Version |\n|---|---|---|\n' + releasesMd;
 
             // Each block is replaced on its own, so an empty one leaves what is there rather than wiping a
             // section because a listing call came back short.
@@ -100,21 +179,21 @@ jobs:
               if (!re.test(readme)) { core.setFailed(`Markers ${marker}:START / ${marker}:END not found in ${path}`); return null; }
               if (!body.trim()) { core.warning(`Nothing to put in ${marker} - leaving it unchanged.`); return readme; }
 
-              const block = `${START}\n<!-- Auto-generated from the org's repo topics. Do not edit by hand. -->\n\n${body.trim()}\n${END}`;
+              const block = `${START}\n<!-- Auto-generated from the org's repo topics and releases. Do not edit by hand. -->\n\n${body.trim()}\n${END}`;
               return readme.replace(re, block);
             };
 
             let readme = fs.readFileSync(path, 'utf8');
             const before = readme;
 
-            readme = write(readme, 'MODS', modsMd);
-            if (readme === null) return;
-            readme = write(readme, 'TOOLS', toolsMd);
-            if (readme === null) return;
+            for (const [marker, body] of [['MODS', modsMd], ['TOOLS', toolsMd], ['RELEASES', releasesMd]]) {
+              readme = write(readme, marker, body);
+              if (readme === null) return;
+            }
 
             if (readme !== before) {
               fs.writeFileSync(path, readme);
-              core.info(`Catalog updated: ${slugs.length} game(s), ${tools.length} tool(s).`);
+              core.info(`Catalog updated: ${slugs.length} game(s), ${tools.length} tool(s), ${releases.length} release(s) seen.`);
             } else {
               core.info('Catalog already up to date.');
             }
