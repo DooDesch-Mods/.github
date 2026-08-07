@@ -53,6 +53,13 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 > This list builds itself from the repos (grouped by game), so it stays current - open any repo for
 > details, downloads and config.
 
+## Tools and sites
+
+Not mods - the things around them.
+
+<!-- TOOLS:START -->
+<!-- TOOLS:END -->
+
 ## Installing
 
 Easiest: use a Thunderstore mod manager ([r2modman](https://thunderstore.io/c/schedule-i/p/ebkr/r2modman/)

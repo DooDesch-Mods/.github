@@ -1,9 +1,15 @@
 name: Update mod catalog
 
-# Regenerates the "Mods" section of profile/README.md from the org's repositories, grouped by their
-# `game-<slug>` topic. Source of truth = each repo's description + topics, so the landing page never needs
-# manual edits: new mod = create a repo (description + a game-<slug> topic), new game = just use a new
-# game-<slug> topic. Optional pretty names/order live in profile/games.json.
+# Regenerates the two generated blocks in profile/README.md from the org's repositories, so the landing page
+# never needs a manual edit. Source of truth = each repo's description + topics.
+#
+#   game-<slug>     -> the "Mods" list, grouped and headed by game. New mod = create the repo with a
+#                      description and a game-<slug> topic. New game = just use a new slug.
+#   doodesch-tool   -> the "Tools and sites" list. One flat list, for the things that are not mods: a
+#                      knowledge base, a dashboard, a backend.
+#
+# Optional pretty names and ordering for the game headings live in profile/games.json. A repo with NEITHER
+# topic is invisible here - that is the usual reason a new repo never shows up.
 
 on:
   schedule:
@@ -25,34 +31,39 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build catalog into profile/README.md
+      - name: Build the catalog into profile/README.md
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
             const org = context.repo.owner;
             const path = 'profile/README.md';
-            const START = '<!-- MODS:START -->';
-            const END = '<!-- MODS:END -->';
+            const TOOL_TOPIC = 'doodesch-tool';
 
             let games = {};
             try { games = JSON.parse(fs.readFileSync('profile/games.json', 'utf8')); } catch (e) {}
 
             const repos = await github.paginate(github.rest.repos.listForOrg, { org, type: 'public', per_page: 100 });
+            const live = repos.filter(r => !r.archived && !r.fork && !r.private);
 
             const groups = {};
-            for (const r of repos) {
-              if (r.archived || r.fork || r.private) continue;
+            const tools = [];
+            for (const r of live) {
               for (const t of (r.topics || [])) {
                 const m = /^game-(.+)$/.exec(t);
                 if (m) (groups[m[1]] ||= []).push(r);
+                else if (t === TOOL_TOPIC) tools.push(r);
               }
             }
 
-            const slugs = Object.keys(groups);
-            if (slugs.length === 0) {
-              core.warning('No repos with a game-* topic found - leaving the catalog unchanged.');
-              return;
+            // A repo carrying neither topic is silently absent from the page, which reads exactly like the
+            // workflow being broken - so say so in the run summary where somebody will actually find it.
+            const untagged = live
+              .filter(r => r.name !== '.github')
+              .filter(r => !(r.topics || []).some(t => /^game-/.test(t) || t === TOOL_TOPIC))
+              .map(r => r.name);
+            if (untagged.length) {
+              core.warning(`Not on the page - no game-* or ${TOOL_TOPIC} topic: ${untagged.join(', ')}`);
             }
 
             const titleCase = s => s.split('-')
@@ -61,31 +72,49 @@ jobs:
             const nameOf = s => (games[s] && games[s].name) || titleCase(s);
             const orderOf = s => (games[s] && typeof games[s].order === 'number') ? games[s].order : 999;
 
-            slugs.sort((a, b) => (orderOf(a) - orderOf(b)) || nameOf(a).localeCompare(nameOf(b)));
+            const line = r => {
+              const desc = (r.description || '').replace(/\s+/g, ' ').trim();
+              return `- **[${r.name}](${r.html_url})**${desc ? ' - ' + desc : ''}\n`;
+            };
+            const byName = (a, b) => a.name.localeCompare(b.name);
 
-            let md = '';
+            let modsMd = '';
+            const slugs = Object.keys(groups)
+              .sort((a, b) => (orderOf(a) - orderOf(b)) || nameOf(a).localeCompare(nameOf(b)));
             for (const slug of slugs) {
-              md += `### ${nameOf(slug)}\n\n`;
-              const list = groups[slug].sort((a, b) => a.name.localeCompare(b.name));
-              for (const r of list) {
-                const desc = (r.description || '').replace(/\s+/g, ' ').trim();
-                md += `- **[${r.name}](${r.html_url})**${desc ? ' - ' + desc : ''}\n`;
-              }
-              md += '\n';
+              modsMd += `### ${nameOf(slug)}\n\n`;
+              for (const r of groups[slug].sort(byName)) modsMd += line(r);
+              modsMd += '\n';
             }
 
-            const block = `${START}\n<!-- Auto-generated from org repos tagged \`game-*\`. Do not edit by hand. -->\n\n${md.trim()}\n${END}`;
+            let toolsMd = '';
+            for (const r of tools.sort(byName)) toolsMd += line(r);
+
+            // Each block is replaced on its own, so an empty one leaves what is there rather than wiping a
+            // section because a listing call came back short.
+            const write = (readme, marker, body) => {
+              const START = `<!-- ${marker}:START -->`;
+              const END = `<!-- ${marker}:END -->`;
+              const re = new RegExp(`${START}[\\s\\S]*?${END}`);
+
+              if (!re.test(readme)) { core.setFailed(`Markers ${marker}:START / ${marker}:END not found in ${path}`); return null; }
+              if (!body.trim()) { core.warning(`Nothing to put in ${marker} - leaving it unchanged.`); return readme; }
+
+              const block = `${START}\n<!-- Auto-generated from the org's repo topics. Do not edit by hand. -->\n\n${body.trim()}\n${END}`;
+              return readme.replace(re, block);
+            };
 
             let readme = fs.readFileSync(path, 'utf8');
-            const re = new RegExp(`${START}[\\s\\S]*?${END}`);
-            if (!re.test(readme)) {
-              core.setFailed('Markers MODS:START / MODS:END not found in profile/README.md');
-              return;
-            }
-            const updated = readme.replace(re, block);
-            if (updated !== readme) {
-              fs.writeFileSync(path, updated);
-              core.info('Catalog updated.');
+            const before = readme;
+
+            readme = write(readme, 'MODS', modsMd);
+            if (readme === null) return;
+            readme = write(readme, 'TOOLS', toolsMd);
+            if (readme === null) return;
+
+            if (readme !== before) {
+              fs.writeFileSync(path, readme);
+              core.info(`Catalog updated: ${slugs.length} game(s), ${tools.length} tool(s).`);
             } else {
               core.info('Catalog already up to date.');
             }
