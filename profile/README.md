@@ -16,14 +16,14 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 <!-- RELEASES:START -->
 <!-- Auto-generated from the org's repo topics and releases. Do not edit by hand. -->
 
-| Date | Mod | Version |
-|---|---|---|
-| 2026-08-07 | **[ScheduleOne-WhatsDab](https://github.com/DooDesch-Mods/ScheduleOne-WhatsDab)** | [v1.1.0](https://github.com/DooDesch-Mods/ScheduleOne-WhatsDab/releases/tag/v1.1.0) |
-| 2026-08-07 | **[ScheduleOne-Sideload](https://github.com/DooDesch-Mods/ScheduleOne-Sideload)** | [v1.10.0](https://github.com/DooDesch-Mods/ScheduleOne-Sideload/releases/tag/v1.10.0) |
-| 2026-08-07 | **[ScheduleOne-PropHunt](https://github.com/DooDesch-Mods/ScheduleOne-PropHunt)** | [v1.3.7](https://github.com/DooDesch-Mods/ScheduleOne-PropHunt/releases/tag/v1.3.7) |
-| 2026-08-07 | **[ScheduleOne-SideHustle](https://github.com/DooDesch-Mods/ScheduleOne-SideHustle)** | [v2.2.9](https://github.com/DooDesch-Mods/ScheduleOne-SideHustle/releases/tag/v2.2.9) |
-| 2026-08-05 | **[Palworld-Palvolve](https://github.com/DooDesch-Mods/Palworld-Palvolve)** | [v1.5.2](https://github.com/DooDesch-Mods/Palworld-Palvolve/releases/tag/v1.5.2) |
-| 2026-08-05 | **[ScheduleOne-Hash](https://github.com/DooDesch-Mods/ScheduleOne-Hash)** | [v1.0.3](https://github.com/DooDesch-Mods/ScheduleOne-Hash/releases/tag/v1.0.3) |
+| Date | Game | Mod | Version |
+|---|---|---|---|
+| 2026-08-07 | Schedule I | **[WhatsDab](https://github.com/DooDesch-Mods/ScheduleOne-WhatsDab)** | [v1.1.0](https://github.com/DooDesch-Mods/ScheduleOne-WhatsDab/releases/tag/v1.1.0) |
+| 2026-08-07 | Schedule I | **[Sideload](https://github.com/DooDesch-Mods/ScheduleOne-Sideload)** | [v1.10.0](https://github.com/DooDesch-Mods/ScheduleOne-Sideload/releases/tag/v1.10.0) |
+| 2026-08-07 | Schedule I | **[PropHunt](https://github.com/DooDesch-Mods/ScheduleOne-PropHunt)** | [v1.3.7](https://github.com/DooDesch-Mods/ScheduleOne-PropHunt/releases/tag/v1.3.7) |
+| 2026-08-07 | Schedule I | **[SideHustle](https://github.com/DooDesch-Mods/ScheduleOne-SideHustle)** | [v2.2.9](https://github.com/DooDesch-Mods/ScheduleOne-SideHustle/releases/tag/v2.2.9) |
+| 2026-08-05 | Palworld | **[Palworld-Palvolve](https://github.com/DooDesch-Mods/Palworld-Palvolve)** | [v1.5.2](https://github.com/DooDesch-Mods/Palworld-Palvolve/releases/tag/v1.5.2) |
+| 2026-08-05 | Schedule I | **[Hash](https://github.com/DooDesch-Mods/ScheduleOne-Hash)** | [v1.0.3](https://github.com/DooDesch-Mods/ScheduleOne-Hash/releases/tag/v1.0.3) |
 <!-- RELEASES:END -->
 
 ## Mods
