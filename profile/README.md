@@ -15,6 +15,9 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 ![Loader](https://img.shields.io/badge/loader-MelonLoader-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
+<!-- ICONS:START -->
+<!-- ICONS:END -->
+
 ## Just released
 
 <!-- RELEASES:START -->

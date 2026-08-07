@@ -256,6 +256,38 @@ jobs:
             }
             if (releasesMd) releasesMd = '| Date | Game | Mod | Version |\n|---|---|---|---|\n' + releasesMd;
 
+            // The icon strip. Twenty-five mods already ship a 256px icon at thunderstore/icon.png, which is real
+            // artwork rather than a generated gradient with the org name in it - so the page's one visual is the
+            // work itself. Existence is checked per run: a missing file would render as a broken image, which is
+            // worse than no picture at all. Height only, so the browser keeps each icon square.
+            const iconUrl = r => `https://raw.githubusercontent.com/${org}/${r.name}/${r.default_branch || 'main'}/thunderstore/icon.png`;
+            const hasIcon = async r => {
+              try {
+                const res = await fetch(iconUrl(r), { method: 'HEAD' });
+                return res.ok;
+              } catch (e) { return false; }
+            };
+
+            let iconsMd = '';
+            const iconRepos = [];
+            for (const slug of slugs) {
+              const strip = sharedPrefixes(groups[slug]);
+              for (const r of groups[slug]) {
+                if ((r.topics || []).includes(MODDER_TOPIC)) continue;   // libraries and samples have nothing to show
+                const cut = r.name.indexOf('-');
+                const label = (cut > 0 && strip.has(r.name.slice(0, cut))) ? r.name.slice(cut + 1) : r.name;
+                iconRepos.push({ label, r });
+              }
+            }
+            iconRepos.sort((a, b) => a.label.localeCompare(b.label));
+
+            const withIcons = [];
+            for (const item of iconRepos) if (await hasIcon(item.r)) withIcons.push(item);
+            for (const { label, r } of withIcons) {
+              iconsMd += `<a href="${r.html_url}" title="${label}"><img src="${iconUrl(r)}" alt="${label}" height="64"></a>\n`;
+            }
+            core.info(`Icons: ${withIcons.length} of ${iconRepos.length} mod(s) have one.`);
+
             if (missingOnNexus.length) {
               core.warning(`No Nexus page matched, so no download count: ${[...new Set(missingOnNexus)].join(', ')}`);
             }
@@ -283,14 +315,14 @@ jobs:
             let readme = fs.readFileSync(path, 'utf8');
             const before = readme;
 
-            for (const [marker, body] of [['MODS', modsMd], ['TOOLS', toolsMd], ['RELEASES', releasesMd], ['TOTAL', totalMd]]) {
+            for (const [marker, body] of [['MODS', modsMd], ['TOOLS', toolsMd], ['RELEASES', releasesMd], ['TOTAL', totalMd], ['ICONS', iconsMd]]) {
               readme = write(readme, marker, body);
               if (readme === null) return;
             }
 
             if (readme !== before) {
               fs.writeFileSync(path, readme);
-              core.info(`Catalog updated: ${slugs.length} game(s), ${tools.length} tool(s), ${releases.length} release(s), ${count(total)} download(s).`);
+              core.info(`Catalog updated: ${slugs.length} game(s), ${tools.length} tool(s), ${releases.length} release(s), ${count(total)} download(s), ${withIcons.length} icon(s).`);
             } else {
               core.info('Catalog already up to date.');
             }
