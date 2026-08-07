@@ -268,18 +268,22 @@ jobs:
               } catch (e) { return false; }
             };
 
+            // Same order as the tables below: game by game in the order the headings run, alphabetical by label
+            // inside each. Sorting the whole strip alphabetically instead would interleave the games, and the
+            // reader who spots an icon then hunts for its row in the wrong section.
             let iconsMd = '';
             const iconRepos = [];
             for (const slug of slugs) {
               const strip = sharedPrefixes(groups[slug]);
-              for (const r of groups[slug]) {
-                if ((r.topics || []).includes(MODDER_TOPIC)) continue;   // libraries and samples have nothing to show
-                const cut = r.name.indexOf('-');
-                const label = (cut > 0 && strip.has(r.name.slice(0, cut))) ? r.name.slice(cut + 1) : r.name;
-                iconRepos.push({ label, r });
-              }
+              groups[slug]
+                .filter(r => !(r.topics || []).includes(MODDER_TOPIC))   // libraries and samples have nothing to show
+                .map(r => {
+                  const cut = r.name.indexOf('-');
+                  return { label: (cut > 0 && strip.has(r.name.slice(0, cut))) ? r.name.slice(cut + 1) : r.name, r };
+                })
+                .sort((a, b) => a.label.localeCompare(b.label))
+                .forEach(item => iconRepos.push(item));
             }
-            iconRepos.sort((a, b) => a.label.localeCompare(b.label));
 
             const withIcons = [];
             for (const item of iconRepos) if (await hasIcon(item.r)) withIcons.push(item);
