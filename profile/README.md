@@ -10,7 +10,7 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 <!-- TOTAL:START -->
 <!-- Auto-generated from the org's repo topics and releases. Do not edit by hand. -->
 
-[![Nexus](https://img.shields.io/badge/Nexus-14%2C368%20downloads-da8e35)](https://www.nexusmods.com/profile/DooDesch/mods)
+[![Nexus](https://img.shields.io/badge/Nexus-14%2C374%20downloads-da8e35)](https://www.nexusmods.com/profile/DooDesch/mods)
 <!-- TOTAL:END -->
 ![Loader](https://img.shields.io/badge/loader-MelonLoader-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
@@ -18,19 +18,13 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 <!-- ICONS:START -->
 <!-- Auto-generated from the org's repo topics and releases. Do not edit by hand. -->
 
-<a href="https://github.com/DooDesch-Mods/Mimesis-BetterJump" title="BetterJump"><img src="https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-BetterJump/main/thunderstore/icon.png" alt="BetterJump" height="64"></a>
-<a href="https://github.com/DooDesch-Mods/Mimesis-Boilerplate" title="Boilerplate"><img src="https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-Boilerplate/main/thunderstore/icon.png" alt="Boilerplate" height="64"></a>
 <a href="https://github.com/DooDesch-Mods/ScheduleOne-Clipwise" title="Clipwise"><img src="https://raw.githubusercontent.com/DooDesch-Mods/ScheduleOne-Clipwise/main/thunderstore/icon.png" alt="Clipwise" height="64"></a>
-<a href="https://github.com/DooDesch-Mods/Mimesis-EnemyDropLoot" title="EnemyDropLoot"><img src="https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-EnemyDropLoot/main/thunderstore/icon.png" alt="EnemyDropLoot" height="64"></a>
-<a href="https://github.com/DooDesch-Mods/Mimesis-FakePlayer" title="FakePlayer"><img src="https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-FakePlayer/main/thunderstore/icon.png" alt="FakePlayer" height="64"></a>
 <a href="https://github.com/DooDesch-Mods/ScheduleOne-Hash" title="Hash"><img src="https://raw.githubusercontent.com/DooDesch-Mods/ScheduleOne-Hash/main/thunderstore/icon.png" alt="Hash" height="64"></a>
 <a href="https://github.com/DooDesch-Mods/ScheduleOne-Hotline" title="Hotline"><img src="https://raw.githubusercontent.com/DooDesch-Mods/ScheduleOne-Hotline/main/thunderstore/icon.png" alt="Hotline" height="64"></a>
 <a href="https://github.com/DooDesch-Mods/ScheduleOne-Inkorporated" title="Inkorporated"><img src="https://raw.githubusercontent.com/DooDesch-Mods/ScheduleOne-Inkorporated/main/thunderstore/icon.png" alt="Inkorporated" height="64"></a>
 <a href="https://github.com/DooDesch-Mods/ScheduleOne-Inkubator" title="Inkubator"><img src="https://raw.githubusercontent.com/DooDesch-Mods/ScheduleOne-Inkubator/main/thunderstore/icon.png" alt="Inkubator" height="64"></a>
-<a href="https://github.com/DooDesch-Mods/Mimesis-InventoryExpansion" title="InventoryExpansion"><img src="https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-InventoryExpansion/main/thunderstore/icon.png" alt="InventoryExpansion" height="64"></a>
 <a href="https://github.com/DooDesch-Mods/ScheduleOne-Litterally" title="Litterally"><img src="https://raw.githubusercontent.com/DooDesch-Mods/ScheduleOne-Litterally/main/thunderstore/icon.png" alt="Litterally" height="64"></a>
 <a href="https://github.com/DooDesch-Mods/ScheduleOne-LooseEnds" title="LooseEnds"><img src="https://raw.githubusercontent.com/DooDesch-Mods/ScheduleOne-LooseEnds/main/thunderstore/icon.png" alt="LooseEnds" height="64"></a>
-<a href="https://github.com/DooDesch-Mods/Mimesis-MarkerMod" title="MarkerMod"><img src="https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-MarkerMod/main/thunderstore/icon.png" alt="MarkerMod" height="64"></a>
 <a href="https://github.com/DooDesch-Mods/ScheduleOne-Personify" title="Personify"><img src="https://raw.githubusercontent.com/DooDesch-Mods/ScheduleOne-Personify/main/thunderstore/icon.png" alt="Personify" height="64"></a>
 <a href="https://github.com/DooDesch-Mods/ScheduleOne-Personnel" title="Personnel"><img src="https://raw.githubusercontent.com/DooDesch-Mods/ScheduleOne-Personnel/main/thunderstore/icon.png" alt="Personnel" height="64"></a>
 <a href="https://github.com/DooDesch-Mods/ScheduleOne-PropHunt" title="PropHunt"><img src="https://raw.githubusercontent.com/DooDesch-Mods/ScheduleOne-PropHunt/main/thunderstore/icon.png" alt="PropHunt" height="64"></a>
@@ -40,9 +34,15 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 <a href="https://github.com/DooDesch-Mods/ScheduleOne-Siesta" title="Siesta"><img src="https://raw.githubusercontent.com/DooDesch-Mods/ScheduleOne-Siesta/main/thunderstore/icon.png" alt="Siesta" height="64"></a>
 <a href="https://github.com/DooDesch-Mods/ScheduleOne-Snitch" title="Snitch"><img src="https://raw.githubusercontent.com/DooDesch-Mods/ScheduleOne-Snitch/main/thunderstore/icon.png" alt="Snitch" height="64"></a>
 <a href="https://github.com/DooDesch-Mods/ScheduleOne-TightBeam" title="TightBeam"><img src="https://raw.githubusercontent.com/DooDesch-Mods/ScheduleOne-TightBeam/main/thunderstore/icon.png" alt="TightBeam" height="64"></a>
-<a href="https://github.com/DooDesch-Mods/Mimesis-TooManyPlayers" title="TooManyPlayers"><img src="https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-TooManyPlayers/main/thunderstore/icon.png" alt="TooManyPlayers" height="64"></a>
 <a href="https://github.com/DooDesch-Mods/ScheduleOne-WhatsDab" title="WhatsDab"><img src="https://raw.githubusercontent.com/DooDesch-Mods/ScheduleOne-WhatsDab/main/thunderstore/icon.png" alt="WhatsDab" height="64"></a>
 <a href="https://github.com/DooDesch-Mods/ScheduleOne-Yoink" title="Yoink"><img src="https://raw.githubusercontent.com/DooDesch-Mods/ScheduleOne-Yoink/main/thunderstore/icon.png" alt="Yoink" height="64"></a>
+<a href="https://github.com/DooDesch-Mods/Mimesis-BetterJump" title="BetterJump"><img src="https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-BetterJump/main/thunderstore/icon.png" alt="BetterJump" height="64"></a>
+<a href="https://github.com/DooDesch-Mods/Mimesis-Boilerplate" title="Boilerplate"><img src="https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-Boilerplate/main/thunderstore/icon.png" alt="Boilerplate" height="64"></a>
+<a href="https://github.com/DooDesch-Mods/Mimesis-EnemyDropLoot" title="EnemyDropLoot"><img src="https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-EnemyDropLoot/main/thunderstore/icon.png" alt="EnemyDropLoot" height="64"></a>
+<a href="https://github.com/DooDesch-Mods/Mimesis-FakePlayer" title="FakePlayer"><img src="https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-FakePlayer/main/thunderstore/icon.png" alt="FakePlayer" height="64"></a>
+<a href="https://github.com/DooDesch-Mods/Mimesis-InventoryExpansion" title="InventoryExpansion"><img src="https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-InventoryExpansion/main/thunderstore/icon.png" alt="InventoryExpansion" height="64"></a>
+<a href="https://github.com/DooDesch-Mods/Mimesis-MarkerMod" title="MarkerMod"><img src="https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-MarkerMod/main/thunderstore/icon.png" alt="MarkerMod" height="64"></a>
+<a href="https://github.com/DooDesch-Mods/Mimesis-TooManyPlayers" title="TooManyPlayers"><img src="https://raw.githubusercontent.com/DooDesch-Mods/Mimesis-TooManyPlayers/main/thunderstore/icon.png" alt="TooManyPlayers" height="64"></a>
 <!-- ICONS:END -->
 
 ## Just released
@@ -52,11 +52,11 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 
 | Date | Game | Mod | Version |
 |---|---|---|---|
+| 2026-08-07 | Palworld | **[Palworld-Palvolve](https://github.com/DooDesch-Mods/Palworld-Palvolve)** | [v1.5.3](https://github.com/DooDesch-Mods/Palworld-Palvolve/releases/tag/v1.5.3) |
 | 2026-08-07 | Schedule I | **[PropHunt](https://github.com/DooDesch-Mods/ScheduleOne-PropHunt)** | [v1.3.8](https://github.com/DooDesch-Mods/ScheduleOne-PropHunt/releases/tag/v1.3.8) |
 | 2026-08-07 | Schedule I | **[WhatsDab](https://github.com/DooDesch-Mods/ScheduleOne-WhatsDab)** | [v1.1.0](https://github.com/DooDesch-Mods/ScheduleOne-WhatsDab/releases/tag/v1.1.0) |
 | 2026-08-07 | Schedule I | **[Sideload](https://github.com/DooDesch-Mods/ScheduleOne-Sideload)** | [v1.10.0](https://github.com/DooDesch-Mods/ScheduleOne-Sideload/releases/tag/v1.10.0) |
 | 2026-08-07 | Schedule I | **[SideHustle](https://github.com/DooDesch-Mods/ScheduleOne-SideHustle)** | [v2.2.9](https://github.com/DooDesch-Mods/ScheduleOne-SideHustle/releases/tag/v2.2.9) |
-| 2026-08-05 | Palworld | **[Palworld-Palvolve](https://github.com/DooDesch-Mods/Palworld-Palvolve)** | [v1.5.2](https://github.com/DooDesch-Mods/Palworld-Palvolve/releases/tag/v1.5.2) |
 | 2026-08-05 | Schedule I | **[Hash](https://github.com/DooDesch-Mods/ScheduleOne-Hash)** | [v1.0.3](https://github.com/DooDesch-Mods/ScheduleOne-Hash/releases/tag/v1.0.3) |
 <!-- RELEASES:END -->
 
@@ -79,11 +79,11 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 | **[LooseEnds](https://github.com/DooDesch-Mods/ScheduleOne-LooseEnds)** | Schedule I - NPCs who spot a body call the cops and an investigation kicks off. | |
 | **[Personify](https://github.com/DooDesch-Mods/ScheduleOne-Personify)** | In-game NPC editor for Schedule I - design NPCs live, export Personnel packs. | [269](https://www.nexusmods.com/schedule1/mods/2276) |
 | **[Personnel](https://github.com/DooDesch-Mods/ScheduleOne-Personnel)** | The NPC framework for Schedule I - NPC packs as plain folders, spawned by mods as real S1API... | [255](https://www.nexusmods.com/schedule1/mods/2275) |
-| **[PropHunt](https://github.com/DooDesch-Mods/ScheduleOne-PropHunt)** | Multiplayer prop hunt for Schedule I - hide as a prop or hunt them down. | [85](https://www.nexusmods.com/schedule1/mods/2283) |
+| **[PropHunt](https://github.com/DooDesch-Mods/ScheduleOne-PropHunt)** | Multiplayer prop hunt for Schedule I - hide as a prop or hunt them down. | [87](https://www.nexusmods.com/schedule1/mods/2283) |
 | **[Reflash](https://github.com/DooDesch-Mods/ScheduleOne-Reflash)** | Put the in game phone on your real phone. Scan the code in the Connect app and messages, map... | |
-| **[RVRepairVan](https://github.com/DooDesch-Mods/RVRepairVan)** | Repair your wrecked RV in Schedule I through a tracked questline, with referral haggling and... | [9,338](https://www.nexusmods.com/schedule1/mods/280) |
+| **[RVRepairVan](https://github.com/DooDesch-Mods/RVRepairVan)** | Repair your wrecked RV in Schedule I through a tracked questline, with referral haggling and... | [9,341](https://www.nexusmods.com/schedule1/mods/280) |
 | **[SideHustle](https://github.com/DooDesch-Mods/ScheduleOne-SideHustle)** | A main-menu hub that lists installed gamemode mods and launches them without a savegame. | [493](https://www.nexusmods.com/schedule1/mods/2232) |
-| **[Sideload](https://github.com/DooDesch-Mods/ScheduleOne-Sideload)** | Write Schedule I mod interfaces as HTML, CSS and JavaScript. | [89](https://www.nexusmods.com/schedule1/mods/2360) |
+| **[Sideload](https://github.com/DooDesch-Mods/ScheduleOne-Sideload)** | Write Schedule I mod interfaces as HTML, CSS and JavaScript. | [90](https://www.nexusmods.com/schedule1/mods/2360) |
 | **[Siesta](https://github.com/DooDesch-Mods/ScheduleOne-Siesta)** | NPC performance LOD for Schedule I - hides and pauses distant, off-screen NPCs for more FPS... | [416](https://www.nexusmods.com/schedule1/mods/2210) |
 | **[Snitch](https://github.com/DooDesch-Mods/ScheduleOne-Snitch)** | A performance profiler for Schedule I - cost + state of NPCs, trash, quests and your own... | [191](https://www.nexusmods.com/schedule1/mods/2222) |
 | **[TightBeam](https://github.com/DooDesch-Mods/ScheduleOne-TightBeam)** | A believable, limited-range handheld flashlight for Schedule I with a cross-mod control API. | [326](https://www.nexusmods.com/schedule1/mods/2255) |
