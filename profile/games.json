@@ -1,6 +1,18 @@
 {
-  "_comment": "Optional pretty-names + ordering for the auto-generated mod catalog. Keyed by the game-<slug> topic suffix. A new game works WITHOUT editing this (it falls back to a title-cased name, sorted after the ordered ones) - only add an entry here if you want a custom display name or order.",
-  "schedule-i": { "name": "Schedule I", "order": 1 },
-  "mimesis": { "name": "Mimesis", "order": 2 },
-  "palworld": { "name": "Palworld", "order": 3 }
+  "_comment": "Optional pretty-names + ordering for the auto-generated mod catalog. Keyed by the game-<slug> topic suffix. A new game works WITHOUT editing this (it falls back to a title-cased name, sorted after the ordered ones) - only add an entry here if you want a custom display name or order. 'nexus' is the game's Nexus domain, which scopes the download lookup to that game.",
+  "schedule-i": {
+    "name": "Schedule I",
+    "order": 1,
+    "nexus": "schedule1"
+  },
+  "mimesis": {
+    "name": "Mimesis",
+    "order": 2,
+    "nexus": "mimesis"
+  },
+  "palworld": {
+    "name": "Palworld",
+    "order": 3,
+    "nexus": "palworld"
+  }
 }

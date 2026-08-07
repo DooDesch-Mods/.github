@@ -50,6 +50,39 @@ jobs:
             let games = {};
             try { games = JSON.parse(fs.readFileSync('profile/games.json', 'utf8')); } catch (e) {}
 
+            let nexusCfg = {};
+            try { nexusCfg = JSON.parse(fs.readFileSync('profile/nexus.json', 'utf8')); } catch (e) {}
+
+            // Download numbers straight from Nexus. The v2 GraphQL endpoint answers this uploader's own mods
+            // anonymously, so no secret is involved and a fork of this repo keeps working. A failure here costs
+            // the numbers and nothing else: every column falls back to blank and the page still builds.
+            const norm = s => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+            const nexusByGame = {};
+            if (nexusCfg.uploaderId) {
+              try {
+                const query = `{ mods(filter: { uploaderId: [{ value: "${nexusCfg.uploaderId}", op: EQUALS }] }, count: 100) {
+                  nodes { modId name downloads game { domainName } } } }`;
+                const res = await fetch('https://api.nexusmods.com/v2/graphql', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ query }),
+                });
+                const body = await res.json();
+                if (body.errors) throw new Error(JSON.stringify(body.errors).slice(0, 200));
+
+                for (const m of (body.data?.mods?.nodes || [])) {
+                  const domain = m.game?.domainName || '';
+                  (nexusByGame[domain] ||= { byName: {}, byId: {} });
+                  // The title up to its first " - " is the mod's actual name; the rest is the tagline.
+                  nexusByGame[domain].byName[norm(m.name.split(' - ')[0])] = m;
+                  nexusByGame[domain].byId[m.modId] = m;
+                }
+                core.info(`Nexus: ${(body.data?.mods?.nodes || []).length} mod(s) read.`);
+              } catch (e) {
+                core.warning(`Nexus downloads unavailable, the columns stay empty: ${e.message}`);
+              }
+            }
+
             const repos = await github.paginate(github.rest.repos.listForOrg, { org, type: 'public', per_page: 100 });
             const live = repos.filter(r => !r.archived && !r.fork && !r.private);
 
@@ -92,19 +125,61 @@ jobs:
               return d.slice(0, d.lastIndexOf(' ', LIMIT - 3)).replace(/[,;:-]$/, '') + '...';
             };
 
-            const table = (list, strip) => {
+            // Which Nexus page a repo is. Three spellings are tried against the Nexus title, all inside the
+            // repo's own game: the repo name, the name without a shared game prefix, and whatever follows the
+            // last dash. An override in nexus.json wins over all of them, and no match means no number - a
+            // wrong count next to a mod is worse than an empty cell.
+            const missingOnNexus = [];
+            const nexusFor = (r, slug, strip) => {
+              const domain = games[slug] && games[slug].nexus;
+              const shelf = domain && nexusByGame[domain];
+              if (!shelf) return null;
+
+              const override = (nexusCfg.overrides || {})[r.name];
+              if (override) return shelf.byId[override] || null;
+
+              const cut = r.name.indexOf('-');
+              const candidates = [r.name];
+              if (cut > 0 && strip && strip.has(r.name.slice(0, cut))) candidates.push(r.name.slice(cut + 1));
+              if (r.name.includes('-')) candidates.push(r.name.slice(r.name.lastIndexOf('-') + 1));
+
+              for (const c of candidates) {
+                const hit = shelf.byName[norm(c)];
+                if (hit) return hit;
+              }
+
+              missingOnNexus.push(r.name);
+              return null;
+            };
+
+            const count = n => n.toLocaleString('en-US');
+
+            const table = (list, strip, slug) => {
               // Sorted by the LABEL, not by the repo name. With the shared prefix dropped the two differ, and
               // sorting by the hidden name puts RVRepairVan above Clipwise for a reason nobody can see.
               const rows = list
                 .map(r => {
                   const cut = r.name.indexOf('-');
                   const label = (strip && cut > 0 && strip.has(r.name.slice(0, cut))) ? r.name.slice(cut + 1) : r.name;
-                  return { label, r };
+                  return { label, r, nexus: slug ? nexusFor(r, slug, strip) : null };
                 })
                 .sort((a, b) => a.label.localeCompare(b.label));
 
-              let md = '| Mod | What it does |\n|---|---|\n';
-              for (const { label, r } of rows) md += `| **[${label}](${r.html_url})** | ${summarise(r)} |\n`;
+              const withNumbers = rows.some(x => x.nexus);
+
+              let md = withNumbers
+                ? '| Mod | What it does | Downloads |\n|---|---|--:|\n'
+                : '| Mod | What it does |\n|---|---|\n';
+
+              for (const { label, r, nexus } of rows) {
+                md += `| **[${label}](${r.html_url})** | ${summarise(r)} |`;
+                if (withNumbers) {
+                  md += nexus
+                    ? ` [${count(nexus.downloads)}](https://www.nexusmods.com/${nexus.game.domainName}/mods/${nexus.modId}) |`
+                    : ' |';
+                }
+                md += '\n';
+              }
               return md;
             };
 
@@ -132,13 +207,13 @@ jobs:
               const forPlayers = all.filter(r => !(r.topics || []).includes(MODDER_TOPIC));
 
               modsMd += `### ${nameOf(slug)}\n\n`;
-              modsMd += table(forPlayers.length ? forPlayers : all, strip);
+              modsMd += table(forPlayers.length ? forPlayers : all, strip, slug);
 
               // Libraries, shared source and example projects are noise to the person looking for something
               // to install, and the only thing that matters to the person writing a mod. Folded, not dropped.
               if (forPlayers.length && forModders.length) {
                 modsMd += `\n<details>\n<summary><b>For modders</b> - libraries, shared source and examples (${forModders.length})</summary>\n\n`;
-                modsMd += table(forModders, strip);
+                modsMd += table(forModders, strip, slug);
                 modsMd += `\n</details>\n`;
               }
               modsMd += '\n';
@@ -181,6 +256,16 @@ jobs:
             }
             if (releasesMd) releasesMd = '| Date | Game | Mod | Version |\n|---|---|---|---|\n' + releasesMd;
 
+            if (missingOnNexus.length) {
+              core.warning(`No Nexus page matched, so no download count: ${[...new Set(missingOnNexus)].join(', ')}`);
+            }
+
+            const everyMod = Object.values(nexusByGame).flatMap(g => Object.values(g.byId));
+            const total = everyMod.reduce((sum, m) => sum + (m.downloads || 0), 0);
+            const totalMd = total
+              ? `[![Nexus](https://img.shields.io/badge/Nexus-${encodeURIComponent(count(total))}%20downloads-da8e35)](${nexusCfg.profileUrl || '#'})`
+              : '';
+
             // Each block is replaced on its own, so an empty one leaves what is there rather than wiping a
             // section because a listing call came back short.
             const write = (readme, marker, body) => {
@@ -198,14 +283,14 @@ jobs:
             let readme = fs.readFileSync(path, 'utf8');
             const before = readme;
 
-            for (const [marker, body] of [['MODS', modsMd], ['TOOLS', toolsMd], ['RELEASES', releasesMd]]) {
+            for (const [marker, body] of [['MODS', modsMd], ['TOOLS', toolsMd], ['RELEASES', releasesMd], ['TOTAL', totalMd]]) {
               readme = write(readme, marker, body);
               if (readme === null) return;
             }
 
             if (readme !== before) {
               fs.writeFileSync(path, readme);
-              core.info(`Catalog updated: ${slugs.length} game(s), ${tools.length} tool(s), ${releases.length} release(s) seen.`);
+              core.info(`Catalog updated: ${slugs.length} game(s), ${tools.length} tool(s), ${releases.length} release(s), ${count(total)} download(s).`);
             } else {
               core.info('Catalog already up to date.');
             }

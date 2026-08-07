@@ -7,7 +7,8 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 
 **👉 All my mods in one place on Nexus: [nexusmods.com/profile/DooDesch](https://www.nexusmods.com/profile/DooDesch/mods)**
 
-[![Nexus](https://img.shields.io/badge/Nexus-all%20my%20mods-da8e35)](https://www.nexusmods.com/profile/DooDesch/mods)
+<!-- TOTAL:START -->
+<!-- TOTAL:END -->
 ![Loader](https://img.shields.io/badge/loader-MelonLoader-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 

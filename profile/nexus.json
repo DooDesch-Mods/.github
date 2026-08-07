@@ -1,0 +1,8 @@
+{
+  "_comment": "Download numbers on the landing page. The v2 GraphQL endpoint answers this uploader's mods anonymously - no API key, nothing secret here. A repo is matched to its Nexus page by name, trying the repo name, the name without its game prefix, and the part after the last dash, against the Nexus title up to its first ' - '. Anything that does not match lands in 'overrides' as repo -> modId, or in the run summary as a warning. A wrong number next to a mod is worse than none, so nothing is guessed.",
+  "uploaderId": 4244721,
+  "profileUrl": "https://www.nexusmods.com/profile/DooDesch/mods",
+  "overrides": {
+    "RVRepairVan": 280
+  }
+}
