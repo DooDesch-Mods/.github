@@ -149,7 +149,19 @@ jobs:
             if (!tools.length) toolsMd = '';
 
             // Newest releases, across everything in the catalogue. A repo with no release 404s and is skipped.
+            // Labels are shortened the same way the tables shorten them, against every catalogued repo rather
+            // than one game's, so a mod reads the same here as it does below and as it does on Nexus. The game
+            // earns its own column: this is the one list on the page that is not already grouped by one.
             const catalogued = [...new Set(Object.values(groups).flat())];
+            const strippedGlobally = sharedPrefixes(catalogued);
+            const gameOf = {};
+            for (const slug of slugs) for (const r of groups[slug]) gameOf[r.name] ||= nameOf(slug);
+
+            const shorten = name => {
+              const cut = name.indexOf('-');
+              return (cut > 0 && strippedGlobally.has(name.slice(0, cut))) ? name.slice(cut + 1) : name;
+            };
+
             const releases = [];
             for (const r of catalogued) {
               try {
@@ -165,9 +177,9 @@ jobs:
             const day = iso => new Date(iso).toISOString().slice(0, 10);
             let releasesMd = '';
             for (const rel of releases.slice(0, RECENT)) {
-              releasesMd += `| ${day(rel.at)} | **[${rel.repo}](https://github.com/${org}/${rel.repo})** | [${rel.tag}](${rel.url}) |\n`;
+              releasesMd += `| ${day(rel.at)} | ${gameOf[rel.repo] || ''} | **[${shorten(rel.repo)}](https://github.com/${org}/${rel.repo})** | [${rel.tag}](${rel.url}) |\n`;
             }
-            if (releasesMd) releasesMd = '| Date | Mod | Version |\n|---|---|---|\n' + releasesMd;
+            if (releasesMd) releasesMd = '| Date | Game | Mod | Version |\n|---|---|---|---|\n' + releasesMd;
 
             // Each block is replaced on its own, so an empty one leaves what is there rather than wiping a
             // section because a listing call came back short.
