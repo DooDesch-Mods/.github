@@ -10,7 +10,7 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 <!-- TOTAL:START -->
 <!-- Auto-generated from the org's repo topics and releases. Do not edit by hand. -->
 
-[![Nexus](https://img.shields.io/badge/Nexus-29%2C744%20downloads-da8e35)](https://www.nexusmods.com/profile/DooDesch/mods)
+[![Nexus](https://img.shields.io/badge/Nexus-30%2C334%20downloads-da8e35)](https://www.nexusmods.com/profile/DooDesch/mods)
 <!-- TOTAL:END -->
 ![Loader](https://img.shields.io/badge/loader-MelonLoader-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
@@ -72,25 +72,25 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 |---|---|--:|
 | **[Clipwise](https://github.com/DooDesch-Mods/ScheduleOne-Clipwise)** | Category tabs, search, filters and tooltips for the Schedule I management clipboard - and it... | |
 | **[FullHouse](https://github.com/DooDesch-Mods/ScheduleOne-FullHouse)** | Bigger co-op lobbies for Schedule I - raise the 4-player cap (32 by default). MelonLoader mod. | |
-| **[Hash](https://github.com/DooDesch-Mods/ScheduleOne-Hash)** | A terminal instead of the dev console: completion, arguments, output and history, on the... | [191](https://www.nexusmods.com/schedule1/mods/2408) |
-| **[Hotline](https://github.com/DooDesch-Mods/ScheduleOne-Hotline)** | One overlay and one key for every mod's HUD - a framework + compatibility layer for Schedule I. | [242](https://www.nexusmods.com/schedule1/mods/2239) |
-| **[Inkorporated](https://github.com/DooDesch-Mods/ScheduleOne-Inkorporated)** | Custom tattoo framework for Schedule I - mods add tattoos to the in-game tattoo shop via... | [463](https://www.nexusmods.com/schedule1/mods/2214) |
-| **[Inkubator](https://github.com/DooDesch-Mods/ScheduleOne-Inkubator)** | In-game 3D tattoo editor for Schedule I: import PNGs, place them on the character, preview... | [348](https://www.nexusmods.com/schedule1/mods/2233) |
+| **[Hash](https://github.com/DooDesch-Mods/ScheduleOne-Hash)** | A terminal instead of the dev console: completion, arguments, output and history, on the... | [193](https://www.nexusmods.com/schedule1/mods/2408) |
+| **[Hotline](https://github.com/DooDesch-Mods/ScheduleOne-Hotline)** | One overlay and one key for every mod's HUD - a framework + compatibility layer for Schedule I. | [243](https://www.nexusmods.com/schedule1/mods/2239) |
+| **[Inkorporated](https://github.com/DooDesch-Mods/ScheduleOne-Inkorporated)** | Custom tattoo framework for Schedule I - mods add tattoos to the in-game tattoo shop via... | [467](https://www.nexusmods.com/schedule1/mods/2214) |
+| **[Inkubator](https://github.com/DooDesch-Mods/ScheduleOne-Inkubator)** | In-game 3D tattoo editor for Schedule I: import PNGs, place them on the character, preview... | [352](https://www.nexusmods.com/schedule1/mods/2233) |
 | **[Litterally](https://github.com/DooDesch-Mods/ScheduleOne-Litterally)** | Trash performance for Schedule I - the map can hold 100k+ pieces of litter, lag-free. | |
 | **[LooseEnds](https://github.com/DooDesch-Mods/ScheduleOne-LooseEnds)** | Schedule I - NPCs who spot a body call the cops and an investigation kicks off. | |
 | **[Personify](https://github.com/DooDesch-Mods/ScheduleOne-Personify)** | In-game NPC editor for Schedule I - design NPCs live, export Personnel packs. | [369](https://www.nexusmods.com/schedule1/mods/2276) |
-| **[Personnel](https://github.com/DooDesch-Mods/ScheduleOne-Personnel)** | The NPC framework for Schedule I - NPC packs as plain folders, spawned by mods as real S1API... | [1,447](https://www.nexusmods.com/schedule1/mods/2275) |
-| **[Polyfill](https://github.com/DooDesch-Mods/ScheduleOne-Polyfill)** | Keeps older Schedule I mods working after a game update. | [5,017](https://www.nexusmods.com/schedule1/mods/2452) |
-| **[PropHunt](https://github.com/DooDesch-Mods/ScheduleOne-PropHunt)** | Multiplayer prop hunt for Schedule I - hide as a prop or hunt them down. | [144](https://www.nexusmods.com/schedule1/mods/2283) |
+| **[Personnel](https://github.com/DooDesch-Mods/ScheduleOne-Personnel)** | The NPC framework for Schedule I - NPC packs as plain folders, spawned by mods as real S1API... | [1,551](https://www.nexusmods.com/schedule1/mods/2275) |
+| **[Polyfill](https://github.com/DooDesch-Mods/ScheduleOne-Polyfill)** | Keeps older Schedule I mods working after a game update. | [5,178](https://www.nexusmods.com/schedule1/mods/2452) |
+| **[PropHunt](https://github.com/DooDesch-Mods/ScheduleOne-PropHunt)** | Multiplayer prop hunt for Schedule I - hide as a prop or hunt them down. | [145](https://www.nexusmods.com/schedule1/mods/2283) |
 | **[Reflash](https://github.com/DooDesch-Mods/ScheduleOne-Reflash)** | Put the in game phone on your real phone. Scan the code in the Connect app and messages, map... | |
 | **[RVRepairVan](https://github.com/DooDesch-Mods/ScheduleOne-RVRepairVan)** | Repair your wrecked RV in Schedule I through a tracked questline, with referral haggling and... | |
-| **[SideHustle](https://github.com/DooDesch-Mods/ScheduleOne-SideHustle)** | A main-menu hub that lists installed gamemode mods and launches them without a savegame. | [929](https://www.nexusmods.com/schedule1/mods/2232) |
-| **[Sideload](https://github.com/DooDesch-Mods/ScheduleOne-Sideload)** | Write Schedule I mod interfaces as HTML, CSS and JavaScript. | [863](https://www.nexusmods.com/schedule1/mods/2360) |
-| **[Siesta](https://github.com/DooDesch-Mods/ScheduleOne-Siesta)** | NPC performance LOD for Schedule I - hides and pauses distant, off-screen NPCs for more FPS... | [1,534](https://www.nexusmods.com/schedule1/mods/2210) |
-| **[Snitch](https://github.com/DooDesch-Mods/ScheduleOne-Snitch)** | A performance profiler for Schedule I - cost + state of NPCs, trash, quests and your own... | [261](https://www.nexusmods.com/schedule1/mods/2222) |
-| **[TightBeam](https://github.com/DooDesch-Mods/ScheduleOne-TightBeam)** | A believable, limited-range handheld flashlight for Schedule I with a cross-mod control API. | [521](https://www.nexusmods.com/schedule1/mods/2255) |
-| **[WhatsDab](https://github.com/DooDesch-Mods/ScheduleOne-WhatsDab)** | Chat on the Schedule I phone. Threads, unread counts, group and one to one, in both... | [411](https://www.nexusmods.com/schedule1/mods/2361) |
-| **[Yoink](https://github.com/DooDesch-Mods/ScheduleOne-Yoink)** | A hand winch for Schedule I - hook anything at the exact point you aimed at and reel it out... | [1,205](https://www.nexusmods.com/schedule1/mods/2377) |
+| **[SideHustle](https://github.com/DooDesch-Mods/ScheduleOne-SideHustle)** | A main-menu hub that lists installed gamemode mods and launches them without a savegame. | [935](https://www.nexusmods.com/schedule1/mods/2232) |
+| **[Sideload](https://github.com/DooDesch-Mods/ScheduleOne-Sideload)** | Write Schedule I mod interfaces as HTML, CSS and JavaScript. | [890](https://www.nexusmods.com/schedule1/mods/2360) |
+| **[Siesta](https://github.com/DooDesch-Mods/ScheduleOne-Siesta)** | NPC performance LOD for Schedule I - hides and pauses distant, off-screen NPCs for more FPS... | [1,629](https://www.nexusmods.com/schedule1/mods/2210) |
+| **[Snitch](https://github.com/DooDesch-Mods/ScheduleOne-Snitch)** | A performance profiler for Schedule I - cost + state of NPCs, trash, quests and your own... | [263](https://www.nexusmods.com/schedule1/mods/2222) |
+| **[TightBeam](https://github.com/DooDesch-Mods/ScheduleOne-TightBeam)** | A believable, limited-range handheld flashlight for Schedule I with a cross-mod control API. | [522](https://www.nexusmods.com/schedule1/mods/2255) |
+| **[WhatsDab](https://github.com/DooDesch-Mods/ScheduleOne-WhatsDab)** | Chat on the Schedule I phone. Threads, unread counts, group and one to one, in both... | [416](https://www.nexusmods.com/schedule1/mods/2361) |
+| **[Yoink](https://github.com/DooDesch-Mods/ScheduleOne-Yoink)** | A hand winch for Schedule I - hook anything at the exact point you aimed at and reel it out... | [1,300](https://www.nexusmods.com/schedule1/mods/2377) |
 
 <details>
 <summary><b>For modders</b> - libraries, shared source and examples (5)</summary>
@@ -109,19 +109,19 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 
 | Mod | What it does | Downloads |
 |---|---|--:|
-| **[BetterJump](https://github.com/DooDesch-Mods/Mimesis-BetterJump)** | Mimesis - tweakable jumping. | [127](https://www.nexusmods.com/mimesis/mods/5) |
+| **[BetterJump](https://github.com/DooDesch-Mods/Mimesis-BetterJump)** | Mimesis - tweakable jumping. | [128](https://www.nexusmods.com/mimesis/mods/5) |
 | **[Boilerplate](https://github.com/DooDesch-Mods/Mimesis-Boilerplate)** | Mimesis - a starter template for building your own mods on MimicAPI. | |
-| **[EnemyDropLoot](https://github.com/DooDesch-Mods/Mimesis-EnemyDropLoot)** | Mimesis - enemies drop loot. | [198](https://www.nexusmods.com/mimesis/mods/6) |
+| **[EnemyDropLoot](https://github.com/DooDesch-Mods/Mimesis-EnemyDropLoot)** | Mimesis - enemies drop loot. | [201](https://www.nexusmods.com/mimesis/mods/6) |
 | **[FakePlayer](https://github.com/DooDesch-Mods/Mimesis-FakePlayer)** | Mimesis - add fake players to a lobby (handy for testing). | |
-| **[InventoryExpansion](https://github.com/DooDesch-Mods/Mimesis-InventoryExpansion)** | Mimesis - a bigger inventory. | [274](https://www.nexusmods.com/mimesis/mods/8) |
-| **[MarkerMod](https://github.com/DooDesch-Mods/Mimesis-MarkerMod)** | Mimesis - in-world markers / pings. | [79](https://www.nexusmods.com/mimesis/mods/7) |
+| **[InventoryExpansion](https://github.com/DooDesch-Mods/Mimesis-InventoryExpansion)** | Mimesis - a bigger inventory. | [278](https://www.nexusmods.com/mimesis/mods/8) |
+| **[MarkerMod](https://github.com/DooDesch-Mods/Mimesis-MarkerMod)** | Mimesis - in-world markers / pings. | [81](https://www.nexusmods.com/mimesis/mods/7) |
 | **[TooManyPlayers](https://github.com/DooDesch-Mods/Mimesis-TooManyPlayers)** | Mimesis - raise the lobby player cap. | |
 
 ### Palworld
 
 | Mod | What it does | Downloads |
 |---|---|--:|
-| **[Palworld-Palvolve](https://github.com/DooDesch-Mods/Palworld-Palvolve)** | Turn a captured Pal into a related form and keep everything it earned. | [3,203](https://www.nexusmods.com/palworld/mods/3976) |
+| **[Palworld-Palvolve](https://github.com/DooDesch-Mods/Palworld-Palvolve)** | Turn a captured Pal into a related form and keep everything it earned. | [3,237](https://www.nexusmods.com/palworld/mods/3976) |
 <!-- MODS:END -->
 
 > Both lists build themselves from the repos, so they stay current. Open any repo for the full
