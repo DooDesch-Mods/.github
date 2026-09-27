@@ -1,9 +1,12 @@
 # DooDesch Mods 🎮
 
-Small, focused MelonLoader mods for a few games - mostly quality-of-life and performance stuff I wanted in
-my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstore and GitHub Releases.
+Mods for Valheim, Palworld, Schedule I and Mimesis. Free, on Thunderstore, Nexus Mods and GitHub Releases.
 
 > 🛟 **Need help or found a bug?** Get support at [support.doodesch.de](https://support.doodesch.de).
+
+Discord: [mods.doodesch.de](https://mods.doodesch.de)
+
+The SideHustle lobby, Hash, Polyfill and the Palvolve configurator run on a server I pay for. Tips: [ko-fi.com/doodesch](https://ko-fi.com/doodesch)
 
 **👉 All my mods in one place on Nexus: [nexusmods.com/profile/DooDesch](https://www.nexusmods.com/profile/DooDesch/mods)**
 
@@ -12,8 +15,8 @@ my own runs, cleaned up and shared. Open source, free, and on Nexus, Thunderstor
 
 [![Nexus](https://img.shields.io/badge/Nexus-37%2C366%20downloads-da8e35)](https://www.nexusmods.com/profile/DooDesch/mods)
 <!-- TOTAL:END -->
-![Loader](https://img.shields.io/badge/loader-MelonLoader-green)
-![License](https://img.shields.io/badge/license-MIT-blue)
+
+Built with: MelonLoader (Schedule I, Mimesis), BepInEx and Jotunn (Valheim), UE4SS (Palworld)
 
 <!-- ICONS:START -->
 <!-- Auto-generated from the org's repo topics and releases. Do not edit by hand. -->
@@ -145,10 +148,10 @@ Not mods. The things around them.
 
 ## Installing
 
-Easiest: use a Thunderstore mod manager ([r2modman](https://thunderstore.io/c/schedule-i/p/ebkr/r2modman/)
-or Gale) and install from there - it pulls in MelonLoader and the right API for you. Manual: install
-[MelonLoader](https://melonwiki.xyz/), then drop the mod's `.dll` (plus its API dependency) into the game's
-`Mods/` folder. Each mod's README has the specifics and config options.
+Easiest: use a Thunderstore mod manager ([r2modman](https://thunderstore.io/package/ebkr/r2modman/)
+or Gale) and install from there - it pulls in the mod loader and the right API for you. Manual install
+depends on the game's loader (MelonLoader, BepInEx or UE4SS). Each mod's README has the steps and config
+options.
 
 ## Found a bug or need help?
 
@@ -157,9 +160,11 @@ Lemme know if anything breaks - I read everything, even if it takes me a bit (bu
 
 ## Built with
 
-[MelonLoader](https://melonwiki.xyz/) and each game's community modding API (S1API for Schedule I,
-MimicAPI for Mimesis). Big thanks to those projects and the modding communities around them.
+[MelonLoader](https://melonwiki.xyz/), [BepInEx](https://github.com/BepInEx/BepInEx),
+[Jotunn](https://github.com/Valheim-Modding/Jotunn), [UE4SS](https://github.com/UE4SS-RE/RE-UE4SS) and each
+game's community modding API (S1API for Schedule I, MimicAPI for Mimesis). Big thanks to those projects and
+the modding communities around them.
 
 ## License
 
-MIT, unless a repo says otherwise. Use it, learn from it, build on it.
+Each repo names its own license. The Valheim mods are source-available, not open source.

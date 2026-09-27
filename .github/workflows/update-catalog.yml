@@ -48,10 +48,14 @@ jobs:
             const RECENT = 6;
 
             let games = {};
-            try { games = JSON.parse(fs.readFileSync('profile/games.json', 'utf8')); } catch (e) {}
+            try { games = JSON.parse(fs.readFileSync('profile/games.json', 'utf8')); } catch (e) {
+              core.warning(`profile/games.json could not be read, the defaults apply: ${e.message}`);
+            }
 
             let nexusCfg = {};
-            try { nexusCfg = JSON.parse(fs.readFileSync('profile/nexus.json', 'utf8')); } catch (e) {}
+            try { nexusCfg = JSON.parse(fs.readFileSync('profile/nexus.json', 'utf8')); } catch (e) {
+              core.warning(`profile/nexus.json could not be read, the defaults apply: ${e.message}`);
+            }
 
             // Download numbers straight from Nexus. The v2 GraphQL endpoint answers this uploader's own mods
             // anonymously, so no secret is involved and a fork of this repo keeps working. A failure here costs
