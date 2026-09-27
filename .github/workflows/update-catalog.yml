@@ -269,7 +269,10 @@ jobs:
               try {
                 const res = await fetch(iconUrl(r), { method: 'HEAD' });
                 return res.ok;
-              } catch (e) { return false; }
+              } catch (e) {
+                core.warning(`Icon check failed for ${r.name}, the icon is left out: ${e.message}`);
+                return false;
+              }
             };
 
             // Same order as the tables below: game by game in the order the headings run, alphabetical by label
