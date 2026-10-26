@@ -27,5 +27,9 @@
   "mmorpg-tycoon-2": {
     "name": "MMORPG Tycoon 2",
     "order": 6
+  },
+  "supermarket-together": {
+    "name": "Supermarket Together",
+    "order": 7
   }
 }
