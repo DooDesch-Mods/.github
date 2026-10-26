@@ -19,5 +19,13 @@
     "name": "Mimesis",
     "order": 4,
     "nexus": "mimesis"
+  },
+  "the-cabin-game": {
+    "name": "The Cabin Game",
+    "order": 5
+  },
+  "mmorpg-tycoon-2": {
+    "name": "MMORPG Tycoon 2",
+    "order": 6
   }
 }
