@@ -1,0 +1,319 @@
+name: MIMESIS release
+
+on:
+  workflow_call:
+    inputs:
+      project:
+        type: string
+        required: true
+      assembly:
+        type: string
+        required: true
+      library:
+        type: boolean
+        default: false
+      mimicapi:
+        type: boolean
+        default: false
+      thunderstore:
+        type: boolean
+        default: true
+      nexus:
+        type: boolean
+        default: true
+      api_requirement:
+        type: boolean
+        default: false
+      operation:
+        type: string
+        default: verify
+      version:
+        type: string
+        default: ''
+      existing_file_uid:
+        type: string
+        default: ''
+    secrets:
+      WORKSPACE_TOKEN:
+        required: false
+      THUNDERSTORE_TOKEN:
+        required: false
+      NEXUSMODS_API_KEY:
+        required: false
+      DISCORD_RELEASE_WEBHOOK:
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mimesis-release-${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  operation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Validate the requested operation
+        env:
+          OPERATION: ${{ inputs.operation }}
+          VERSION: ${{ inputs.version }}
+          EXISTING_UID: ${{ inputs.existing_file_uid }}
+          NEXUS: ${{ inputs.nexus }}
+          API_REQUIREMENT: ${{ inputs.api_requirement }}
+        run: |
+          case "$OPERATION" in
+            verify) echo 'Verification only: builds and packages, no publication or announcement.' ;;
+            publish)
+              if [ "$GITHUB_EVENT_NAME" != push ] || [[ "$GITHUB_REF" != refs/tags/v* ]]; then
+                echo '::error::Publishing requires a pushed release tag.'; exit 1
+              fi ;;
+            nexus)
+              if [ "$NEXUS" != true ] || [ -z "$VERSION" ]; then
+                echo '::error::Nexus repair needs an enabled Nexus target and an explicit published version.'; exit 1
+              fi ;;
+            requirements)
+              if [ "$NEXUS" != true ] || [ "$API_REQUIREMENT" != true ] || [[ ! "$EXISTING_UID" =~ ^[1-9][0-9]*$ ]] || [ -z "$VERSION" ]; then
+                echo '::error::Requirement repair needs an enabled API requirement, published version and existing file UID.'; exit 1
+              fi ;;
+            *) echo "::error::Unsupported release operation: $OPERATION"; exit 1 ;;
+          esac
+
+  build:
+    needs: operation
+    if: inputs.operation == 'verify' || inputs.operation == 'publish'
+    uses: ./.github/workflows/mimesis-build.yml
+    with:
+      project: ${{ inputs.project }}
+      assembly: ${{ inputs.assembly }}
+      library: ${{ inputs.library }}
+      mimicapi: ${{ inputs.mimicapi }}
+      thunderstore: ${{ inputs.thunderstore }}
+      nexus: ${{ inputs.nexus }}
+      api_requirement: ${{ inputs.api_requirement }}
+      package: true
+      tag_release: ${{ inputs.operation == 'publish' }}
+      version: ${{ inputs.version }}
+    secrets:
+      WORKSPACE_TOKEN: ${{ secrets.WORKSPACE_TOKEN }}
+
+  existing:
+    needs: operation
+    if: inputs.operation == 'nexus' || inputs.operation == 'requirements'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      name: ${{ steps.meta.outputs.name }}
+      version: ${{ steps.meta.outputs.version }}
+      notes_bbcode: ${{ steps.meta.outputs.notes_bbcode }}
+      notes_plain: ${{ steps.meta.outputs.notes_plain }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: source
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: DooDesch-Mods/.github
+          path: pipeline
+          persist-credentials: false
+      - name: Validate the existing release metadata
+        id: meta
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CI_PROJECT: ${{ inputs.project }}
+          CI_ASSEMBLY: ${{ inputs.assembly }}
+          CI_LIBRARY: ${{ inputs.library }}
+          CI_API_DEPENDENCY: ${{ inputs.mimicapi }}
+          CI_API_REQUIREMENT: ${{ inputs.api_requirement }}
+          CI_THUNDERSTORE: ${{ inputs.thunderstore }}
+          CI_NEXUS: ${{ inputs.nexus }}
+          CI_VERSION: ${{ inputs.version }}
+          NEXUS_MOD_ID: ${{ vars.NEXUS_MOD_ID }}
+          NEXUS_FILE_GROUP_ID: ${{ vars.NEXUS_FILE_GROUP_ID }}
+          OPERATION: ${{ inputs.operation }}
+        run: |
+          if [ "$OPERATION" = nexus ]; then
+            python pipeline/mimesis/ci.py metadata --root source --metadata release-meta/release.json
+            python pipeline/mimesis/ci.py existing --metadata release-meta/release.json --out dist
+          else
+            python pipeline/mimesis/ci.py metadata --root source --metadata release-meta/release.json --package
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.assembly }}-metadata
+          path: release-meta/release.json
+          if-no-files-found: error
+      - name: Retain the verified published Nexus package
+        if: inputs.operation == 'nexus'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.assembly }}-nexus
+          path: dist/${{ inputs.assembly }}_${{ inputs.version }}_nexus.zip
+          if-no-files-found: error
+
+  github:
+    needs: build
+    if: inputs.operation == 'publish'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.assembly }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.assembly }}-nexus
+      - name: Extract the checked release payload
+        env:
+          ASSEMBLY: ${{ inputs.assembly }}
+          VERSION: ${{ needs.build.outputs.version }}
+        run: unzip -q "${ASSEMBLY}_${VERSION}.zip" -d release
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          body: ${{ needs.build.outputs.notes }}
+          files: |
+            release/${{ inputs.assembly }}.dll
+            ${{ inputs.assembly }}_${{ needs.build.outputs.version }}.zip
+            ${{ inputs.assembly }}_${{ needs.build.outputs.version }}_nexus.zip
+
+  thunderstore:
+    needs: build
+    if: inputs.operation == 'publish' && inputs.thunderstore
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.assembly }}
+      - name: Stage the checked package without rebuilding it
+        env:
+          ASSEMBLY: ${{ inputs.assembly }}
+          VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          mkdir package
+          mv "${ASSEMBLY}_${VERSION}.zip" package/
+      - name: Publish Thunderstore package
+        uses: GreenTF/upload-thunderstore-package@v4.3
+        with:
+          token: ${{ secrets.THUNDERSTORE_TOKEN }}
+          community: mimesis
+          namespace: DooDesch
+          name: ${{ inputs.assembly }}
+          version: ${{ needs.build.outputs.version }}
+          description: ${{ needs.build.outputs.description }}
+          repo: mimesis.thunderstore.io
+          path: package
+          file: ${{ inputs.assembly }}_${{ needs.build.outputs.version }}.zip
+          categories: Mods
+
+  nexus:
+    needs: [operation, build, existing]
+    if: ${{ always() && !cancelled() && inputs.nexus && ((inputs.operation == 'publish' && needs.build.result == 'success') || (inputs.operation == 'nexus' && needs.existing.result == 'success')) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      version_id: ${{ steps.upload.outputs.version_id }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.assembly }}-nexus
+      - name: Publish Nexus file and mod metadata
+        id: upload
+        uses: Nexus-Mods/upload-action@v1.0.0-beta.10
+        with:
+          api_key: ${{ secrets.NEXUSMODS_API_KEY }}
+          file_id: ${{ vars.NEXUS_FILE_GROUP_ID }}
+          mod_id: ${{ vars.NEXUS_MOD_ID }}
+          filename: ${{ inputs.assembly }}_${{ needs.build.outputs.version || needs.existing.outputs.version }}_nexus.zip
+          version: ${{ needs.build.outputs.version || needs.existing.outputs.version }}
+          display_name: ${{ inputs.assembly }} ${{ needs.build.outputs.version || needs.existing.outputs.version }}
+          description: |
+            ${{ inputs.api_requirement && '[b]Requires [url=https://www.nexusmods.com/mimesis/mods/11]MimicAPI[/url], installed separately.[/b]' || '' }}
+
+            ${{ needs.build.outputs.notes_bbcode || needs.existing.outputs.notes_bbcode }}
+          changelog: ${{ inputs.operation == 'publish' && github.run_attempt == 1 && needs.build.outputs.notes_plain || '' }}
+          category: main
+          archive_existing_version: true
+          update_mod_version: true
+          primary_mod_manager_download: true
+          allow_mod_manager_download: true
+          show_requirements_pop_up: ${{ inputs.api_requirement }}
+      - name: Confirm the uploaded version
+        env:
+          VERSION_ID: ${{ steps.upload.outputs.version_id }}
+        run: |
+          if [[ ! "$VERSION_ID" =~ ^[1-9][0-9]*$ ]]; then
+            echo '::error::Nexus did not acknowledge a valid version ID. Inspect the file history before retrying.'
+            exit 1
+          fi
+          echo "Nexus acknowledged version $VERSION_ID" >> "$GITHUB_STEP_SUMMARY"
+
+  requirements:
+    needs: [build, existing, nexus]
+    if: ${{ always() && !cancelled() && inputs.nexus && inputs.api_requirement && (needs.nexus.result == 'success' || (inputs.operation == 'requirements' && needs.existing.result == 'success')) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: DooDesch-Mods/.github
+          path: pipeline
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.assembly }}-metadata
+          path: release-meta
+      - name: Preserve and confirm Nexus requirements
+        env:
+          NEXUSMODS_API_KEY: ${{ secrets.NEXUSMODS_API_KEY }}
+          NEXUS_VERSION_ID: ${{ needs.nexus.outputs.version_id || inputs.existing_file_uid }}
+        run: python pipeline/mimesis/ci.py requirements --metadata release-meta/release.json --out receipts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ inputs.assembly }}-nexus-requirements
+          path: receipts/
+          if-no-files-found: warn
+
+  announce:
+    needs: [build, github, thunderstore, nexus, requirements]
+    if: ${{ always() && !cancelled() && inputs.operation == 'publish' && needs.build.result == 'success' && needs.github.result == 'success' && (!inputs.thunderstore || needs.thunderstore.result == 'success') && (!inputs.nexus || needs.nexus.result == 'success') && (!inputs.api_requirement || needs.requirements.result == 'success') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: DooDesch-Mods/.github
+          path: pipeline
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.assembly }}-package-receipt
+          path: release-meta
+      - name: Prepare announcement from confirmed store results
+        env:
+          CI_STORE_RESULTS: >-
+            {"github":"${{ needs.github.result }}","thunderstore":"${{ needs.thunderstore.result }}","nexus":"${{ needs.nexus.result }}","requirements":"${{ needs.requirements.result }}"}
+        run: python pipeline/mimesis/ci.py discord --metadata release-meta/release.json --out receipts
+      - name: Announce the confirmed release
+        env:
+          WEBHOOK: ${{ secrets.DISCORD_RELEASE_WEBHOOK }}
+        run: |
+          if [ -z "$WEBHOOK" ]; then
+            echo '::notice::DISCORD_RELEASE_WEBHOOK is not configured; no announcement attempted.'
+            exit 0
+          fi
+          curl --fail-with-body --silent --show-error -X POST -H 'Content-Type: application/json' \
+            --data-binary @receipts/discord.json "$WEBHOOK"
+          echo 'Discord acknowledged the release announcement.' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.assembly }}-announcement
+          path: receipts/discord.json
+          if-no-files-found: error

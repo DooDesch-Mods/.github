@@ -1,0 +1,32 @@
+name: Check MIMESIS CI
+
+on:
+  pull_request:
+    paths: ['mimesis/**', '.github/workflows/mimesis-*.yml', '.github/workflows/check-mimesis-ci.yml']
+  push:
+    branches: [main]
+    paths: ['mimesis/**', '.github/workflows/mimesis-*.yml', '.github/workflows/check-mimesis-ci.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s mimesis -v
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23.x'
+          cache: false
+      - name: Validate shared workflow syntax and expressions
+        run: |
+          go install github.com/rhysd/actionlint/cmd/actionlint@v1.7.7
+          "$(go env GOPATH)/bin/actionlint" -shellcheck= -pyflakes= .github/workflows/mimesis-build.yml .github/workflows/mimesis-release.yml .github/workflows/check-mimesis-ci.yml
