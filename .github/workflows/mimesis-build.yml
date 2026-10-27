@@ -1,0 +1,230 @@
+name: MIMESIS build
+
+on:
+  workflow_call:
+    inputs:
+      project:
+        type: string
+        required: true
+      assembly:
+        type: string
+        required: true
+      library:
+        type: boolean
+        default: false
+      mimicapi:
+        type: boolean
+        default: false
+      thunderstore:
+        type: boolean
+        default: true
+      nexus:
+        type: boolean
+        default: true
+      api_requirement:
+        type: boolean
+        default: false
+      package:
+        type: boolean
+        default: false
+      tag_release:
+        type: boolean
+        default: false
+      version:
+        type: string
+        default: ''
+      workspace_ref:
+        type: string
+        default: daa96481968a53add9b23167e9ea6f6a035e7a65
+      mimicapi_ref:
+        type: string
+        default: v0.4.3
+    secrets:
+      WORKSPACE_TOKEN:
+        required: false
+    outputs:
+      name:
+        value: ${{ jobs.metadata.outputs.name }}
+      version:
+        value: ${{ jobs.metadata.outputs.version }}
+      description:
+        value: ${{ jobs.metadata.outputs.description }}
+      notes:
+        value: ${{ jobs.metadata.outputs.notes }}
+      notes_bbcode:
+        value: ${{ jobs.metadata.outputs.notes_bbcode }}
+      notes_plain:
+        value: ${{ jobs.metadata.outputs.notes_plain }}
+
+permissions:
+  contents: read
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      name: ${{ steps.meta.outputs.name }}
+      version: ${{ steps.meta.outputs.version }}
+      description: ${{ steps.meta.outputs.description }}
+      notes: ${{ steps.meta.outputs.notes }}
+      notes_bbcode: ${{ steps.meta.outputs.notes_bbcode }}
+      notes_plain: ${{ steps.meta.outputs.notes_plain }}
+      fork: ${{ steps.access.outputs.fork }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: source
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: DooDesch-Mods/.github
+          path: pipeline
+          persist-credentials: false
+      - name: Check reference access
+        id: access
+        env:
+          WORKSPACE_TOKEN: ${{ secrets.WORKSPACE_TOKEN }}
+          FORK: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
+        run: |
+          if [ "$FORK" = true ]; then
+            echo '::notice::Fork pull request: source metadata is checked; the private-reference build is not run.'
+            echo 'fork=true' >> "$GITHUB_OUTPUT"
+          elif [ -z "$WORKSPACE_TOKEN" ]; then
+            echo '::error::WORKSPACE_TOKEN is missing; no private-reference build can run.'
+            exit 1
+          else
+            echo 'fork=false' >> "$GITHUB_OUTPUT"
+          fi
+      - name: Validate source and release metadata
+        id: meta
+        env:
+          CI_PROJECT: ${{ inputs.project }}
+          CI_ASSEMBLY: ${{ inputs.assembly }}
+          CI_LIBRARY: ${{ inputs.library }}
+          CI_API_DEPENDENCY: ${{ inputs.mimicapi }}
+          CI_API_REQUIREMENT: ${{ inputs.api_requirement }}
+          CI_THUNDERSTORE: ${{ inputs.thunderstore }}
+          CI_NEXUS: ${{ inputs.nexus }}
+          CI_VERSION: ${{ inputs.version }}
+          CI_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          NEXUS_MOD_ID: ${{ vars.NEXUS_MOD_ID }}
+          NEXUS_FILE_GROUP_ID: ${{ vars.NEXUS_FILE_GROUP_ID }}
+          PACKAGE: ${{ inputs.package }}
+          TAG_RELEASE: ${{ inputs.tag_release }}
+        run: |
+          args=(metadata --root source --metadata release-meta/release.json)
+          if [ "$PACKAGE" = true ]; then args+=(--package); fi
+          if [ "$TAG_RELEASE" = true ]; then args+=(--tag-release); fi
+          python pipeline/mimesis/ci.py "${args[@]}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.assembly }}-metadata
+          path: release-meta/release.json
+          if-no-files-found: error
+
+  build:
+    needs: metadata
+    if: needs.metadata.outputs.fork != 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration: [Debug, Release]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: source
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: DooDesch-Mods/.github
+          path: pipeline
+          persist-credentials: false
+      - name: Checkout validated MIMESIS references
+        uses: actions/checkout@v4
+        with:
+          repository: DooDesch-Mods/Mimesis-Workspace
+          ref: ${{ inputs.workspace_ref }}
+          path: Workspace
+          ssh-key: ${{ secrets.WORKSPACE_TOKEN }}
+          persist-credentials: false
+      - name: Checkout maintained MimicAPI dependency
+        if: inputs.mimicapi
+        uses: actions/checkout@v4
+        with:
+          repository: DooDesch-Mods/MimicAPI
+          ref: ${{ inputs.mimicapi_ref }}
+          path: Workspace/MimicAPI
+          persist-credentials: false
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.assembly }}-metadata
+          path: release-meta
+      - name: Build ${{ matrix.configuration }}
+        env:
+          PROJECT: ${{ inputs.project }}
+          CONFIGURATION: ${{ matrix.configuration }}
+          VERSION: ${{ needs.metadata.outputs.version }}
+          PACKAGE: ${{ inputs.package }}
+        run: |
+          args=(build "source/$PROJECT" --configuration "$CONFIGURATION"
+            "-p:WorkspaceLibPath=$GITHUB_WORKSPACE/Workspace/lib"
+            "-p:GameManagedPath=$GITHUB_WORKSPACE/Workspace/lib/game"
+            "-p:GameAssemblyPath=$GITHUB_WORKSPACE/Workspace/lib/game"
+            "-p:MelonLoaderPath=$GITHUB_WORKSPACE/Workspace/lib/melonloader"
+            "-p:MimicAPIPath=$GITHUB_WORKSPACE/Workspace/MimicAPI"
+            -warnaserror:CS0618)
+          if [ "$PACKAGE" = true ]; then args+=("-p:Version=$VERSION"); fi
+          dotnet "${args[@]}"
+      - name: Check Harmony and reflection targets
+        if: matrix.configuration == 'Release'
+        env:
+          PROJECT: ${{ inputs.project }}
+          ASSEMBLY: ${{ inputs.assembly }}
+        run: |
+          project_dir="$(dirname "$PROJECT")"
+          dotnet run --project Workspace/tools/quickcheck/ModTargets/ModTargets.csproj --configuration Release -- \
+            --decompiled "$GITHUB_WORKSPACE/Workspace/decompiled" \
+            --out "$GITHUB_WORKSPACE/quickcheck" \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --root "$ASSEMBLY=$GITHUB_WORKSPACE/source/$project_dir" \
+            --refs "$GITHUB_WORKSPACE/Workspace/lib/game" \
+            --refs "$GITHUB_WORKSPACE/Workspace/lib/melonloader" \
+            --helpers "$GITHUB_WORKSPACE/Workspace/tools/quickcheck/helpers.json"
+      - name: Verify and package the Release DLL
+        if: inputs.package && matrix.configuration == 'Release'
+        run: python pipeline/mimesis/ci.py package --root source --metadata release-meta/release.json --out dist
+      - name: Retain target-check report
+        if: always() && matrix.configuration == 'Release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.assembly }}-quickcheck
+          path: quickcheck/
+          if-no-files-found: warn
+      - name: Retain flat package
+        if: inputs.package && matrix.configuration == 'Release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.assembly }}
+          path: dist/${{ inputs.assembly }}_${{ needs.metadata.outputs.version }}.zip
+          if-no-files-found: error
+      - name: Retain Nexus package
+        if: inputs.package && matrix.configuration == 'Release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.assembly }}-nexus
+          path: dist/${{ inputs.assembly }}_${{ needs.metadata.outputs.version }}_nexus.zip
+          if-no-files-found: error
+      - name: Retain package checksums
+        if: inputs.package && matrix.configuration == 'Release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.assembly }}-package-receipt
+          path: dist/release.json
+          if-no-files-found: error
