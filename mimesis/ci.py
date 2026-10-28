@@ -220,7 +220,7 @@ def package_archives(root, meta, destination):
             require(parts and not Path(relative).is_absolute() and '\\' not in relative and
                     all(part not in ('.git', 'bin', 'obj', 'Workspace', '..') for part in parts),
                     f'Invalid source package path: {relative}')
-            require(Path(relative).suffix.lower() in ('.cs', '.csproj', '.py', '.sh', '.md') or relative == '.gitignore',
+            require(Path(relative).suffix.lower() in ('.cs', '.csproj', '.py', '.sh', '.md', '.yml') or relative == '.gitignore',
                     f'Unsupported source package file: {relative}')
             payload = checked_path(root, relative).read_bytes()
             entry = f'Source/{name}/{relative}'

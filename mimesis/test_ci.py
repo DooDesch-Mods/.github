@@ -132,12 +132,14 @@ class ReleaseContract(unittest.TestCase):
         binary = self.root / 'bin/Release/netstandard2.1/Demo.dll'
         binary.parent.mkdir(parents=True)
         binary.write_bytes(b'MZ fresh assembly fixture 1.2.3')
-        (self.root / 'package-source.json').write_text(json.dumps(['Core.cs', 'LICENSE.md']))
+        (self.root / 'Build.yml').write_text('name: Build\n')
+        (self.root / 'package-source.json').write_text(json.dumps(['Core.cs', 'LICENSE.md', 'Build.yml']))
         out = Path(self.temp.name) / 'dist'
         ci.package_archives(self.root, self.meta(), out)
         for suffix in ('', '_nexus'):
             with zipfile.ZipFile(out / f'Demo_1.2.3{suffix}.zip') as archive:
                 self.assertEqual(archive.read('Source/Demo/Core.cs'), (self.root / 'Core.cs').read_bytes())
+                self.assertEqual(archive.read('Source/Demo/Build.yml'), (self.root / 'Build.yml').read_bytes())
                 self.assertNotIn('Source/Demo/Demo.csproj', archive.namelist())
 
     def test_source_kit_rejects_private_paths_binaries_and_duplicates(self):
