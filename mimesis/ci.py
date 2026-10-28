@@ -209,6 +209,23 @@ def package_archives(root, meta, destination):
                      'manifest.json': (json.dumps(manifest, indent=2) + '\n').encode()}
     nexus = {('Mods/' + filename if filename.endswith('.dll') else filename): content for filename, content in common.items()}
     nexus['README.md'] = (root / 'README.md').read_bytes()
+    source_manifest = root / 'package-source.json'
+    if source_manifest.exists():
+        sources = json.loads(source_manifest.read_text(encoding='utf-8'))
+        require(isinstance(sources, list) and bool(sources), 'package-source.json must be a non-empty list of source paths')
+        require(all(isinstance(p, str) for p in sources), 'Source paths must be strings')
+        require(len(sources) == len(set(sources)), 'Duplicate source path in package-source.json')
+        for relative in sources:
+            parts = Path(relative).parts
+            require(parts and not Path(relative).is_absolute() and '\\' not in relative and
+                    all(part not in ('.git', 'bin', 'obj', 'Workspace', '..') for part in parts),
+                    f'Invalid source package path: {relative}')
+            require(Path(relative).suffix.lower() in ('.cs', '.csproj', '.py', '.sh', '.md') or relative == '.gitignore',
+                    f'Unsupported source package file: {relative}')
+            payload = checked_path(root, relative).read_bytes()
+            entry = f'Source/{name}/{relative}'
+            flat[entry] = payload
+            nexus[entry] = payload
     receipts = {}
     for suffix, files in [('', flat), ('_nexus', nexus)]:
         path = destination / f'{name}_{version}{suffix}.zip'

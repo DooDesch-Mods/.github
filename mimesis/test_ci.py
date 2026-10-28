@@ -128,6 +128,28 @@ class ReleaseContract(unittest.TestCase):
         self.assertIn(' · [Thunderstore]', links)
         self.assertIn(' · [GitHub]', links)
 
+    def test_source_kit_is_explicit_and_kept_in_both_packages(self):
+        binary = self.root / 'bin/Release/netstandard2.1/Demo.dll'
+        binary.parent.mkdir(parents=True)
+        binary.write_bytes(b'MZ fresh assembly fixture 1.2.3')
+        (self.root / 'package-source.json').write_text(json.dumps(['Core.cs', 'LICENSE.md']))
+        out = Path(self.temp.name) / 'dist'
+        ci.package_archives(self.root, self.meta(), out)
+        for suffix in ('', '_nexus'):
+            with zipfile.ZipFile(out / f'Demo_1.2.3{suffix}.zip') as archive:
+                self.assertEqual(archive.read('Source/Demo/Core.cs'), (self.root / 'Core.cs').read_bytes())
+                self.assertNotIn('Source/Demo/Demo.csproj', archive.namelist())
+
+    def test_source_kit_rejects_private_paths_binaries_and_duplicates(self):
+        binary = self.root / 'bin/Release/netstandard2.1/Demo.dll'
+        binary.parent.mkdir(parents=True)
+        binary.write_bytes(b'MZ fresh assembly fixture 1.2.3')
+        for paths in (['../Core.cs'], ['.git/config.md'], ['bin/Core.cs'], ['secret.dll'], ['Core.cs', 'Core.cs']):
+            with self.subTest(paths=paths):
+                (self.root / 'package-source.json').write_text(json.dumps(paths))
+                with self.assertRaises(ValueError):
+                    ci.package_archives(self.root, self.meta(), Path(self.temp.name) / 'dist')
+
     def published_asset(self):
         data = io.BytesIO()
         with zipfile.ZipFile(data, 'w') as archive:
