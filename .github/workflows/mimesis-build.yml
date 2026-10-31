@@ -35,7 +35,7 @@ on:
         default: ''
       workspace_ref:
         type: string
-        default: ddd79a2a0537ea4e86ddcb76adf2ffb42fb99d0c
+        default: 3e5f9d559610a944118668e34e850c4009cdd8cd
       mimicapi_ref:
         type: string
         default: v0.4.3
