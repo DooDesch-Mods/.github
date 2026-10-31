@@ -35,7 +35,7 @@ on:
         default: ''
       workspace_ref:
         type: string
-        default: 5e56e8b28150a60509c60841f03bec2d1065f3a8
+        default: ddd79a2a0537ea4e86ddcb76adf2ffb42fb99d0c
       mimicapi_ref:
         type: string
         default: v0.4.3
@@ -189,11 +189,19 @@ jobs:
           ASSEMBLY: ${{ inputs.assembly }}
         run: |
           project_dir="$(dirname "$PROJECT")"
+          roots=(--root "$ASSEMBLY=$GITHUB_WORKSPACE/source/$project_dir")
+          if grep -q 'Weapons.props' "$GITHUB_WORKSPACE/source/$PROJECT"; then
+            if [ ! -d "$GITHUB_WORKSPACE/Workspace/build/weapons" ]; then
+              echo '::error::The pinned Workspace does not contain the shared weapon source.'
+              exit 1
+            fi
+            roots+=(--root "WeaponShared=$GITHUB_WORKSPACE/Workspace/build/weapons")
+          fi
           dotnet run --project Workspace/tools/quickcheck/ModTargets/ModTargets.csproj --configuration Release -- \
             --decompiled "$GITHUB_WORKSPACE/Workspace/decompiled" \
             --out "$GITHUB_WORKSPACE/quickcheck" \
             --repo-root "$GITHUB_WORKSPACE" \
-            --root "$ASSEMBLY=$GITHUB_WORKSPACE/source/$project_dir" \
+            "${roots[@]}" \
             --refs "$GITHUB_WORKSPACE/Workspace/lib/game" \
             --refs "$GITHUB_WORKSPACE/Workspace/lib/melonloader" \
             --helpers "$GITHUB_WORKSPACE/Workspace/tools/quickcheck/helpers.json"
