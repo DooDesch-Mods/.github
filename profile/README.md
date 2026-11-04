@@ -220,8 +220,9 @@ Not mods. The things around them.
 
 ## Installing
 
-Easiest: use a Thunderstore mod manager ([r2modman](https://thunderstore.io/package/ebkr/r2modman/)
-or Gale) and install from there - it pulls in the mod loader and the right API for you. Manual install
+Easiest: get the mod from its [Nexus Mods page](https://www.nexusmods.com/profile/DooDesch/mods) and install
+it with Vortex. A Thunderstore mod manager ([r2modman](https://thunderstore.io/package/ebkr/r2modman/) or
+Gale) works too and pulls in the mod loader and the right API for you. Manual install
 depends on the game's loader (MelonLoader, BepInEx or UE4SS). Each mod's README has the steps and config
 options.
 
