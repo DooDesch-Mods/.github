@@ -1,0 +1,18 @@
+name: Idea
+description: A new feature or a change.
+type: Feature
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Idea
+      description: What should the mod do?
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      description: The situation in the game where you miss it.
+    validations:
+      required: true
