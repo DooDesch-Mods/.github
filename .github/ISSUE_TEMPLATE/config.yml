@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Support form
+    url: https://support.doodesch.de
+    about: Report without a GitHub account.
+  - name: Discord
+    url: https://mods.doodesch.de
+    about: Questions and help.

@@ -1,0 +1,56 @@
+name: Bug
+description: Something is broken.
+type: Bug
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happens
+      description: What you saw, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps
+      placeholder: |
+        1. Load a save
+        2. ...
+    validations:
+      required: true
+  - type: input
+    id: mod-version
+    attributes:
+      label: Mod version
+      placeholder: "1.2.0"
+    validations:
+      required: true
+  - type: input
+    id: game-version
+    attributes:
+      label: Game version and branch
+      placeholder: "0.4.7f12, default branch"
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Mode
+      options:
+        - Singleplayer
+        - Co-op host
+        - Co-op client
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Log
+      description: "Drag the file in. Schedule I: `MelonLoader/Latest.log`. BepInEx games: `BepInEx/LogOutput.log`."
+    validations:
+      required: true
+  - type: textarea
+    id: mods
+    attributes:
+      label: Other mods
+      description: Optional. The log usually lists them.
